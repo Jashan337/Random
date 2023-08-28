@@ -1,2 +1,3 @@
 # Random
-Random Tutoring Materials
+Random Tutoring Materials I created. 
+## !!For educational purposes only!!

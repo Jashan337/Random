@@ -1,0 +1,2049 @@
+\documentclass[hidelinks,12pt,a4paper]{article}
+\usepackage[text={6.8in,10in},centering,a4paper]{geometry}
+%\usepackage[utf8]{inputenc}
+\usepackage[table]{xcolor}
+\usepackage{indentfirst}
+\usepackage{setspace}
+\usepackage{amssymb,amsmath}
+\usepackage{graphicx,color} % Graphics, Figures
+\usepackage{xcolor} %color
+\usepackage{multicol} %for multiple columns
+%\usepackage[tight,footnotesize]{subfigure}
+\usepackage{tikz}
+\usepackage{pgf}
+\usepackage{pgfplots}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[titletoc]{appendix}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage[numbers]{natbib}
+\usepackage[no-math]{fontspec}
+\usepackage{xunicode} % for Thai fonts
+\usepackage{xltxtra} % for Thai fonts
+\usepackage{fontspec}
+\XeTeXlinebreakskip = 0pt plus 1pt  
+\usepackage{fonts-tlwg}
+\usepackage[inline]{enumitem}
+\usepackage{fancyhdr}
+\usepackage{systeme}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{comment}
+\usepackage{enumitem}
+%\usepackage{pdfpages}
+
+\def\figurename{รูปที่}
+
+\pgfplotsset{compat=1.9}
+\usepgfplotslibrary{fillbetween}
+
+\renewcommand{\baselinestretch}{1.2}
+\DeclareMathSizes{12pt}{12pt}{7pt}{6pt}
+%========== Thai Font ===========================
+\XeTeXlinebreaklocale "th_TH"
+\defaultfontfeatures{Scale=1.2, Mapping=tex-text} 
+\setmainfont[Scale=1.3,
+  BoldFont={THSarabunNew Bold.ttf},
+  ItalicFont={THSarabunNew Italic.ttf},
+  BoldItalicFont={THSarabunNew BoldItalic.ttf},
+]{THSarabunNew.ttf}
+%========== Thai Font ===========================
+
+%=======Set New command for choices==============
+\newlist{choices}{enumerate*}{1}
+%\setlist[choices]{itemsep = 1.125in, label=\Alph*)}
+\setlist[choices]{itemjoin = \hspace{4.5cm}, label=\arabic*)}
+%=======Set New command for choices==============
+
+%========= Inline Item ==========================
+\makeatletter
+\newcommand{\inlineitem}[1][]{%
+\ifnum\enit@type=\tw@
+    {\descriptionlabel{#1}}
+  \hspace{\labelsep}%
+\else
+  \ifnum\enit@type=\z@
+       \refstepcounter{\@listctr}\fi
+    \quad\@itemlabel\hspace{\labelsep}%
+\fi}
+\makeatother
+\parindent=0pt
+%========= Inline Item ==========================
+
+%--------------New command-----------------------
+\newcommand{\s}{\space}
+\newcommand{\qed}{\scalebox{0.8}{$\blacksquare$}}
+\newcommand{\nroot}[2]{\sqrt[\leftroot{-2}\uproot{-2}#1]{#2}}
+\newcommand{\nr}[2]{\sqrt[#1]{#2}}
+\newcommand{\ddx}{\dfrac{d}{dx}}
+\newcommand{\dx}[1]{\dfrac{d#1}{dx}}
+\usepackage{bclogo,graphicx}
+
+\makeatletter
+\newcommand{\bombitem}{%
+  \refstepcounter{\@enumctr}% step the level-specific counter
+  \item[% Insert item/enumeration
+    {\raisebox{-.7ex}[0pt][0pt]{\scalebox{.5}{\bcbombe}}}% Place bomb
+    \,% Space
+    \@nameuse{label\@enumctr}]% Place level-formatted counter
+}
+\makeatother
+
+\makeatletter
+\newcommand{\Jitem}{%
+  \refstepcounter{\@enumctr}% step the level-specific counter
+  \item[% Insert item/enumeration
+    {\raisebox{-0ex}[0pt][0pt]{$\boldsymbol{\textcolor{magenta}{\mathbf{J}}^{\color{blue}{p}}}$}}% Place bomb
+    \,% Space
+    \@nameuse{label\@enumctr}]% Place level-formatted counter
+}
+\makeatother
+%--------------New command-----------------------
+\definecolor{HeadOrange}{RGB}{241,119,35}
+\definecolor{HeadGreen}{RGB}{105,172,61}
+
+%\geometry{left=20mm, right=20mm, top=30mm, bottom=25mm}
+\pagestyle{fancy}
+\definecolor{capri}{rgb}{0.0, 0.75, 1.0}
+
+\renewcommand{\headrulewidth}{0pt}
+\rhead{}
+
+\lhead{\tikz{
+       \node[rectangle,text width=0.75\textwidth,minimum height=8.5mm,fill=HeadOrange,name=rehead] {\color{white}{\textbf{Calculus (แคลคูลัสเบื้องต้น)}}};
+       \node[rectangle,text width=0.25\textwidth,minimum height=9.5mm,align=right,fill=HeadGreen,name=rehead1] at (8.1,0) {\color{white}{\textbf{By P'Jashan}}};
+       }
+}
+
+
+\begin{document}
+\begin{center}
+    \textbf{\huge แคลคูลัสเบื้องต้น}
+\end{center}
+
+\section{ลิมิตและความต่อเนื่องของฟังก์ชัน}
+\subsection{ลิมิต (Limit)}
+ในหัวข้อนี้ จะพิจารณาว่าค่าของฟังก์ชัน $f$ ที่มีโดเมนและเรนจ์เป็นสับเซตของเซตของจำนวนจริงจะเข้าใกล้ค่าใด ขณะที่ $x$ เข้าใกล้จำนวนจริงค่าหนึ่ง สำหรับบางฟังก์ชัน การหาค่าที่จุดหนึ่งอาจไม่สามารถหาค่าได้ เช่น $f(x)=\frac{x+2}{x-1}$ ไม่นิยามที่ $x=1$ เป็นต้น
+
+สัญลักษณ์ของลิมิตเป็นดังนี้
+\begin{align*}
+    \lim_{x\to a} f(x) \hspace{1mm} & \text{อ่านว่า ``ลิมิตของ $f(x)$ เมื่อ $x$ เข้าใกล้ $a$''} \\
+    \lim_{x\to a^{\scriptscriptstyle -}} f(x) \hspace{1mm} & \text{อ่านว่า ``ลิมิตของ $f(x)$ เมื่อ $x$ เข้าใกล้ $a$ ทางซ้าย''} \\
+    \lim_{x\to a^{\scriptscriptstyle +}} f(x) \hspace{1mm} & \text{อ่านว่า ``ลิมิตของ $f(x)$ เมื่อ $x$ เข้าใกล้ $a$ ทางขวา''}
+\end{align*}
+
+\begin{minipage}[h]{0.5\textwidth}
+พิจารณากราฟ $y=f(x)$ ที่แสดงด้านข้าง
+
+$\displaystyle\lim_{x\to a^{\scriptscriptstyle -}} f(x)$ หมายถึง ค่าของ $f$ เมื่อ $x$ เข้าใกล้ $a$ แต่ $x<a$ (กราฟสี \textcolor{blue}{น้ำเงิน})
+
+$\displaystyle\lim_{x\to a^{\scriptscriptstyle +}} f(x)$ หมายถึง ค่าของ $f$ เมื่อ $x$ เข้าใกล้ $a$ แต่ $x>a$ (กราฟสี \textcolor{magenta}{ชมพู})
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.45\textwidth}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.9]
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+        unit vector ratio*=1 1 1,
+        %width=18cm,
+        %height=30cm,
+        xtick={1.5},
+        xticklabels={$a$},
+        ytick={2.75},
+        yticklabels={$L$},
+        xmin=-2,xmax=4,ymin=-0.5,ymax=5,
+        every axis plot/.append style={very thick},
+        axis y line=middle,
+        axis x line=middle,
+        every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+        every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+        ]
+        \node[] at (axis cs:3,3) {$y=f(x)$};
+        \draw[gray,dashed] (axis cs: 1.5,0) -- (axis cs: 1.5,2.75);
+        \addplot[gray,dashed,domain=0:1.5,samples=100,]{2.75};
+        \addplot[magenta,thick,domain=1.5:10,samples=500,name path=A]{x^2-x+2};
+        %\addplot[blue,thick,domain=-4:1.5,samples=500,name path=A]{x^2-x+2};
+        \addplot[blue,thick,domain=-4:1.5,samples=500,name path=A]{(1.75/2^1.5)*2^x+1};
+        %\addplot[draw=none,name path=B] {0};
+        \draw [orange, fill] (axis cs: 1.5,2.75) circle (2pt);
+        %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\vspace{5mm}
+\underline{ตัวอย่าง 1} จงหาค่าของ $\displaystyle\lim_{x\to 2} f(x)$ เมื่อ $f(x)=3x-10$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm} โดยการลองแทนค่า $x$ ใกล้ ๆ $2$ จะได้ค่าของฟังก์ชันแสดงดังตาราง
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+    \rowcolor{pink} 
+    $x$ & $f(x)$ \\
+    \hline
+    $1.7$ & $-4.9$ \\
+    \hline
+    $1.8$ & $-4.6$ \\
+    \hline
+    $1.9$ & $-4.3$ \\
+    \hline
+    $1.99$ & $-4.03$ \\ 
+    \hline
+    $1.999999$ & $-4.000003$ \\
+    \hline
+\end{tabular}
+\hspace{1cm}
+\begin{tabular}{|c|c|}
+    \hline
+    \rowcolor{pink} 
+    $x$ & $f(x)$ \\
+    \hline
+    $2.3$ & $-3.1$ \\
+    \hline
+    $2.2$ & $-3.4$ \\
+    \hline
+    $2.1$ & $-3.7$ \\
+    \hline
+    $2.01$ & $-3.97$ \\
+    \hline
+    $2.000001$ & $-3.999997$ \\
+    \hline
+\end{tabular}
+\end{center}
+\hspace{15mm} จะเห็นว่า ค่าของฟังก์ชัน $f$ เข้าใกล้ $-4$ เมื่อ $x$ เข้าใกล้ $2$ 
+
+\hspace{15mm} ดังนั้น $\displaystyle\lim_{x\to 2} (3x-10) = -4$ \hfill \qed
+
+\newpage
+\underline{ตัวอย่าง 2} จงหาค่าของ 
+$\displaystyle\lim_{x\to -1} \scalebox{0.9}{$\cfrac{x^3+1}{x+1}$}$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm} โดยการลองแทนค่า $x$ ใกล้ ๆ $-1$ จะได้ค่าของฟังก์ชันแสดงดังตาราง
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+    \rowcolor{pink} 
+    $x$ & $\scalebox{0.8}{$\cfrac{x^3+1}{x+1}$}$ \\
+    \hline
+    $-1.2$ & $3.64$ \\
+    \hline
+    $-1.1$ & $3.31$ \\
+    \hline
+    $-1.01$ & $3.0301$ \\
+    \hline
+    $-1.001$ & $3.003001$ \\ 
+    \hline
+    $-1.0001$ & $3.00030001$ \\
+    \hline
+\end{tabular}
+\hspace{1cm}
+\begin{tabular}{|c|c|}
+    \hline
+    \rowcolor{pink} 
+    $x$ & $\scalebox{0.8}{$\cfrac{x^3+1}{x+1}$}$ \\
+    \hline
+    $-0.8$ & $2.44$ \\
+    \hline
+    $-0.9$ & $2.71$ \\
+    \hline
+    $-0.99$ & $2.9701$ \\
+    \hline
+    $-0.999$ & $2.997001$ \\
+    \hline
+    $-0.9999$ & $2.99970001$ \\
+    \hline
+\end{tabular}
+\end{center}
+\hspace{15mm} จะเห็นว่า ค่าของ $\scalebox{0.9}{$\cfrac{x^3+1}{x+1}$}$ เข้าใกล้ $3$ เมื่อ $x$ เข้าใกล้ $-1$ 
+
+\hspace{15mm} ดังนั้น $\displaystyle\lim_{x\to-1} \scalebox{0.9}{$\cfrac{x^3+1}{x+1}$} = 3$ \hfill \qed
+
+\vspace{3mm}
+ข้อสังเกต: จะเห็นว่่าในตัวอย่างที่ 2 แม้ว่าค่าของฟังก์ชันที่ $x=-1$ แต่ลิมิตของฟังก์ชันที่ค่าเข้าใกล้ $x=-1$ มีค่า
+
+\vspace{3mm}
+\underline{ตัวอย่าง 3} นิยามฟังก์ชัน $f$ โดย
+\begin{equation*}
+            f(x) = \left\{
+            \begin{array}{ll}
+                \sqrt{3x+7} & \text{เมื่อ} \hspace{0.8mm} x\leq 3 \\[0.5ex]
+                -0.125(x-5)^2+5.5 & \text{เมื่อ} \hspace{0.8mm} x>3
+            \end{array}
+            \right.
+        \end{equation*}
+
+จงพิจารณาว่า
+$\displaystyle\lim_{x\to 3} f(x)$ มีค่าหรือไม่ ถ้ามี จงหาลิมิตดังกล่าว \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm} จากนิยามที่กำหนด สามารถวาดกราฟ $y=f(x)$ ได้ดังนี้
+\begin{center}
+    \begin{tikzpicture}[scale=0.9]
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+        unit vector ratio*=1 1 1,
+        %width=18cm,
+        %height=30cm,
+        xtick={3},
+        %xticklabels={$a$},
+        ytick={4,5},
+        %yticklabels={$L$},
+        xmin=-1,xmax=7,ymin=-0.5,ymax=6,
+        every axis plot/.append style={very thick},
+        axis y line=middle,
+        axis x line=middle,
+        every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+        every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+        ]
+        %\node[] at (axis cs:3,3) {$y=f(x)$};
+        \draw[gray,dashed] (axis cs: 3,0) -- (axis cs: 3,4) -- (axis cs:0,4);
+        \draw[gray,dashed] (axis cs: 3,4) -- (axis cs: 3,4.9);
+        \draw[gray,dashed] (axis cs: 0,5) -- (axis cs: 2.9,5);
+        \addplot[blue,thick,domain=3.025:10,samples=500,name path=A]{-0.125*(x-5)^2+5.5};
+        %\addplot[blue,thick,domain=-4:1.5,samples=500,name path=A]{x^2-x+2};
+        \addplot[blue,thick,domain=-4:3,samples=500]{sqrt(3*x+7)};
+        %\addplot[draw=none,name path=B] {0};
+        \draw [blue, fill] (axis cs: 3,4) circle (1.5pt);
+        \draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+        %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+\hspace{15mm} จากกราฟจะเห็นว่า ค่าของ $f(x)$ เข้าใกล้ $4$ เมื่อ $x$ เข้าใกล้ $3$ ทางซ้าย นั่นคือ $\displaystyle\lim_{x\to 3^{\scriptscriptstyle -}} f(x) = 4$ 
+
+\hspace{15mm} ในขณะที่ ค่าของ $f(x)$ เข้าใกล้ $5$ เมื่อ $x$ เข้าใกล้ $3$ ทางขวา นั่นคือ $\displaystyle\lim_{x\to 3^{\scriptscriptstyle +}} f(x) = 5$ 
+
+\hspace{15mm} ดังนั้น ไม่มีจำนวนจริงใดเพียงจำนวนเดียว ซึ่งเมื่อ $x$ เข้าใกล้ $3$ แล้ว $f(x)$ เข้าใกล้จำนวนจริงนั้น
+
+\hspace{15mm} เพราะฉะนั้น $\displaystyle\lim_{x\to 3} f(x)$ ไม่มีค่า \hfill \qed
+
+\newpage
+จากตัวอย่างทั้งสามจะเห็นว่า ลิมิตของฟังก์ชันจะมีค่า หรือ ไม่มีค่าก็ได้ และสำหรับบางฟังก์ชันค่าของฟังก์ชันที่ค่านั้น จะนิยามหรือไม่ ก็ได้ เพราะฉะนั้น จึงได้ข้อสรุปของการมีลิมิตดังนี้
+\begin{center}
+\begin{tcolorbox}[width=10cm, sharp corners, colback=green!30, colframe=green!80!blue]
+    กำหนดฟังก์ชัน $f:D_f\rightarrow \mathbb{R}$ โดย $D_f\subset \mathbb{R}$ และ $a\in D_f$
+    \begin{equation*}
+        \boldsymbol{\lim_{x\to a} f(x) \hspace{0.8mm} \textbf{มีค่า} \hspace{1mm} \text{ก็ต่อเมื่อ} \hspace{1mm} \lim_{x\to a^{\scriptscriptstyle -}} f(x) = \lim_{x\to a^{\scriptscriptstyle +}} f(x)}
+    \end{equation*}
+\end{tcolorbox}
+\end{center}
+
+\subsubsection{ทฤษฎีบทเกี่ยวกับลิมิตของฟังก์ชัน}
+ในส่วนที่ผ่านมา การหาลิมิตได้มาจากการลองแทนค่าหรือการวาดกราฟ ซึ่งถ้ารูปแบบของฟังก์ชันมีความซับซ้อน การลองแทนค่าไปเรื่อย ๆ จะทำให้เสียเวลาเป็นอย่างมาก ดังนั้น ทฤษฎีบทต่อไปนี้ จะช่วยให้เราสามารถหาลิมิตได้สะดวกขึ้น
+
+\begin{tcolorbox}[sharp corners, colback=green!30, colframe=green!80!blue, title=\textbf{ทฤษฎีบท (ลิมิต)}]
+    กำหนดให้ $a$ เป็นจำนวนจริงใด ๆ จะได้ว่า
+    \begin{enumerate}
+        \item $\displaystyle\lim_{x\to a} c = c$ เมื่อ $c$ เป็นค่าคงที่ใด ๆ
+        \item $\displaystyle\lim_{x\to a} x^n = a^n$ เมื่อ $n\in \mathbb{N}$
+    \end{enumerate}
+    \vspace{3mm}
+    กำหนดให้ $a,\s k,\s L$  และ $M$ เป็นจำนวนจริงใด ๆ $f$ และ $g$ เป็นฟังก์ชันซึ่งมีโดเมนและเรนจ์เป็นสับเซตของเซตของจำนวนจริง โดยที่ $\displaystyle\lim_{x\to a} f(x) = L$ และ $\displaystyle\lim_{x\to a} g(x) = M$ แล้ว
+    \begin{enumerate}
+        \item $\displaystyle\lim_{x\to a} kf(x) = kL$
+        \item $\displaystyle\lim_{x\to a} \left(f(x)\pm g(x)\right) = \displaystyle\lim_{x\to a} f(x) \pm \displaystyle\lim_{x\to a} g(x) = L\pm M$
+        \item $\displaystyle\lim_{x\to a} \left(f(x)\cdot g(x)\right) = \displaystyle\lim_{x\to a} f(x) \cdot \displaystyle\lim_{x\to a} g(x) = L\cdot M$
+        \item $\displaystyle\lim_{x\to a} \cfrac{f(x)}{g(x)} = \cfrac{\displaystyle\lim_{x\to a} f(x)}{\displaystyle\lim_{x\to a} g(x)}=\cfrac{L}{M}$ \s โดยที่ \s $M\neq 0$
+        \item $\displaystyle\lim_{x\to a} \left(f(x)\right)^n = \left(\displaystyle\lim_{x\to a} f(x)\right)^n = L^n$ \s เมื่อ \s $n\in \mathbb{N}$
+        \item $\displaystyle\lim_{x\to a} \sqrt[n]{f(x)} = \nr{n}{\displaystyle\lim_{x\to a} f(x)} = \nr{n}{L}$ \s เมื่อ \s $n\in\mathbb{N}-\{1\}$, \s $\nr{n}{f(x)}\in\mathbb{R}$ สำหรับ $x$ ที่เข้าใกล้ $a$ และ \\[0.5ex] $\nr{n}{L}\in\mathbb{R}$
+    \end{enumerate}
+\end{tcolorbox}
+\newpage
+\underline{ตัวอย่าง 4} จงหาค่าของ $\displaystyle\lim_{x\to 5} \cfrac{x^3-3x^2+4}{\sqrt{x^2+5x+6}}$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm} โดยทฤษฎีบทเกี่ยวกับลิมิต จะสามารถหาค่าลิมิตดังกล่าวได้ดังนี้
+\begin{align*}
+    \lim_{x\to 5} \frac{x^3-3x^2+4}{\sqrt{x^2+5x+6}} & = \frac{\displaystyle\lim_{x\to 5} (x^3-3x^2+4)}{\displaystyle\lim_{x\to 5} \sqrt{x^2+5x+6}} \\
+    & = \frac{\displaystyle\lim_{x\to 5}x^3- \displaystyle\lim_{x\to 5}3x^2+ \displaystyle\lim_{x\to 5}4}{\sqrt{\displaystyle\lim_{x\to 5}(x^2+5x+6)}} \\
+    & = \frac{5^3- 3\cdot5^2+4}{\sqrt{\displaystyle\lim_{x\to 5}x^2+\displaystyle\lim_{x\to 5}5x+\displaystyle\lim_{x\to 5}6}} \\
+    & = \frac{54}{\sqrt{5^2+5\cdot5+6}} \\
+    & = \frac{27}{\sqrt{14}}
+\end{align*}
+\hspace{15mm} ดังนั้น \s $\displaystyle\lim_{x\to 5} \cfrac{x^3-3x^2+4}{\sqrt{x^2+5x+6}}=\cfrac{27}{\sqrt{14}}=\cfrac{27\sqrt{14}}{14}$ \hfill \qed
+
+\vspace{5mm}
+\underline{ตัวอย่าง 5} จงหาค่าของ $\displaystyle\lim_{x\to 3} \cfrac{x^3-27}{x^2-2x-3}$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm} สังเกตว่า $\displaystyle\lim_{x\to 3} (x^2-2x-3)=0$ ดังนั้นจึงยังไม่สามารถใช้ทฤษฎีบทได้ในทันที
+
+\hspace{15mm} เนื่องจากพิจารณาฟังก์ชันเมื่อ $x$ เข้าใกล้ $3$ กล่าวคือ $x\neq3$ จึงหาค่าลิมิตโดยการจัดรูปฟังก์ชันใหม่ดังนี้
+\begin{align*}
+    \lim_{x\to 3}\frac{x^3-27}{x^2-2x-3} & = \lim_{x\to 3} \frac{(x-3)(x^2+3x+9)}{(x-3)(x+1)} \\ 
+    & = \lim_{x\to 3} \frac{x^2+3x+9}{x+1} \\
+    & = \frac{\displaystyle\lim_{x\to 3} (x^2+3x+9)}{\displaystyle\lim_{x\to 3} (x+1)} = \frac{27}{4}
+\end{align*}
+\hspace{15mm} ดังนั้น \s $\displaystyle\lim_{x\to 3} \cfrac{x^3-27}{x^2-2x-3}=\cfrac{27}{4}$ \hfill \qed
+
+\newpage
+\scalebox{1.1}{\textbf{\textcolor{red!90!blue}{สรุปหลักการหาลิมิต}}}
+
+\begin{tcolorbox}[colback=red!10,colframe=red!90!blue]
+    กำหนดให้ $a$ เป็นจำนวนจริงใด ๆ
+    \begin{itemize}
+        \item ถ้า $f$ เป็นฟังก์ชันพหุนาม แล้ว \s $\displaystyle\lim_{x\to a} f(x) = f(a)$
+        \item ถ้า $f$ และ $g$ เป็นฟังก์ชันพหุนามและ $g(a)\neq0$ แล้ว \s $\displaystyle\lim_{x\to a} \cfrac{f(x)}{g(x)}=\cfrac{f(a)}{g(a)}$
+        \item ถ้า $f$ และ $g$ เป็นฟังก์ชันซึ่ง $g(a)=0$ แล้ว
+        \begin{itemize}
+            \item ถ้า $f(a)\neq0$ แล้ว \s $\displaystyle\lim_{x\to a} \cfrac{f(x)}{g(x)}$ \s \emph{หาค่าไม่ได้}
+            \item ถ้า $f(a)=0$ แล้ว \s ให้จัดรูปฟังก์ชันใหม่เพื่อให้สามารถใช้ทฤษฎีบทเกี่ยวกับลิมิตได้
+        \end{itemize}
+    \end{itemize}
+\end{tcolorbox}
+
+\vspace{5mm}
+\underline{\large แบบฝึกหัด 1}
+\begin{enumerate}
+    \item จงหาลิมิตในข้อต่อไปนี้ ถ้าลิมิตมีค่า
+    \begin{enumerate}
+        \begin{multicols}{2}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $\displaystyle\lim_{x\to -1} (x+3)(x^2+2)$
+        %\vspace{50mm}
+        \item $\displaystyle\lim_{x\to 2} \dfrac{x^2-7x+10}{x^3-6x^2+3x+10}$
+        \end{multicols}
+    \end{enumerate}
+    \vspace{55mm}
+    \begin{enumerate}[resume]
+        \begin{multicols}{2}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $\displaystyle\lim_{x\to 0} \dfrac{\sqrt{2+x}-\sqrt{2-x}}{x}$
+        %\vspace{50mm}
+        \item $\displaystyle\lim_{x\to -8} \dfrac{x+8}{\nr{3}{x}+2}$
+        \end{multicols}
+    \end{enumerate}
+    \newpage
+    \begin{enumerate}[resume]
+        \begin{multicols}{2}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $\displaystyle\lim_{x\to 1^{\scriptscriptstyle -}} \dfrac{\sqrt{x^2+2}}{x|x-1|+4}$
+        %\vspace{50mm}
+        \item $\displaystyle\lim_{x\to 0} \dfrac{\sqrt{x^3+x^2}-x}{x^2}$
+        \end{multicols}
+    \end{enumerate}
+    \vspace{70mm}
+    \item กำหนดให้ 
+    \begin{equation*}
+        f(x) = \left\{ 
+        \begin{array}{ll}
+            \dfrac{x|x+4|}{2x^2+3x-20} & \text{เมื่อ} \hspace{0.8mm} x < 2 \\[2ex]
+            \dfrac{4x-5-\sqrt{3x+3}}{x-2} & \text{เมื่อ} \hspace{0.8mm} x > 2
+        \end{array}
+        \right.
+    \end{equation*}
+    จงหาลิมิตในแต่ละข้อต่อไปนี้ ถ้าลิมิตมีค่า
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \begin{multicols}{2}
+            \item $\displaystyle\lim_{x\to 2^{\scriptscriptstyle -}} f(x)$
+            \vspace{40mm}
+            \item $\displaystyle\lim_{x\to 2^{\scriptscriptstyle +}} f(x)$
+            \vspace{40mm}
+            \item $\displaystyle\lim_{x\to 2} f(x)$
+            \item $\displaystyle\lim_{x\to -4^{\scriptscriptstyle -}} f(x)$
+            \vspace{40mm}
+            \item $\displaystyle\lim_{x\to -4^{\scriptscriptstyle +}} f(x)$
+            \vspace{40mm}
+            \item $\displaystyle\lim_{x\to -4} f(x)$
+        \end{multicols}
+    \end{enumerate}
+\end{enumerate}
+
+\newpage
+\subsection{ความต่อเนื่อง (Continuity)}
+\begin{tcolorbox}[sharp corners, colframe=black!60, title=\textbf{บทนิยาม}]
+    ให้ $f$ เป็นฟังก์ชันซึ่งนิยามบนช่วงเปิด $(a,b)$ ซึ่ง $c\in (a,b)$ \\
+    จะกล่าวว่า $f$ เป็น \emph{ฟังก์ชันต่อเนื่อง (Continuous function)} ที่ $x=c$ ก็ต่อเมื่อ \s $\displaystyle\lim_{x\to c}  f(x) = f(c)$
+\end{tcolorbox}
+
+เพื่อให้เกิดความเข้าใจมากยิ่งขึ้น พิจารณากราฟทั้ง 4 ของ $f$ ต่าง ๆ ดังนี้
+
+%\include{Calculus Supplement code/ContinuityFig}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.9]
+            \begin{axis}[xlabel={$x$},ylabel={$y$},
+                unit vector ratio*=1 1 1,
+                %width=18cm,
+                %height=30cm,
+                xtick={3},
+                xticklabels={$c$},
+                ytick=\empty,
+                %yticklabels={$L$},
+                xmin=-1,xmax=7,ymin=-0.5,ymax=6,
+                every axis plot/.append style={very thick},
+                axis y line=middle,
+                axis x line=middle,
+                every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+                every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+                ]
+                %\node[] at (axis cs:3,3) {$y=f(x)$};
+                \draw[gray,dashed] (axis cs: 3,0) -- (axis cs: 3,4);
+                \draw[gray,dashed] (axis cs: 3,4) -- (axis cs: 3,5);
+                %\draw[gray,dashed] (axis cs: 0,5) -- (axis cs: 2.9,5);
+                \addplot[blue,thick,domain=3.025:10,samples=500,name path=A]{-0.125*(x-5)^2+5.5};
+                \addplot[blue,thick,domain=-4:3,samples=500]{sqrt(3*x+7)};
+                \draw [blue, fill] (axis cs: 3,4) circle (1.5pt);
+                \draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+                %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:case1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[h]{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.9]
+            \begin{axis}[xlabel={$x$},ylabel={$y$},
+                unit vector ratio*=1 1 1,
+                %width=18cm,
+                %height=30cm,
+                xtick={3},
+                xticklabels={$c$},
+                ytick=\empty,
+                %yticklabels={$L$},
+                xmin=-1,xmax=7,ymin=-0.5,ymax=6,
+                every axis plot/.append style={very thick},
+                axis y line=middle,
+                axis x line=middle,
+                every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+                every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+                ]
+                %\node[] at (axis cs:3,3) {$y=f(x)$};
+                \draw[gray,dashed] (axis cs: 3,0) -- (axis cs: 3,10);
+                %\draw[gray,dashed] (axis cs: 0,5) -- (axis cs: 2.9,5);
+                \addplot[blue,thick,domain=3:10,samples=500,name path=A]{-log10(x-3)+4.8};
+                \addplot[blue,thick,domain=-4:3,samples=500]{(x+0.5)*(x-2)^2+0.5};
+                \draw [blue, fill=white] (axis cs: 3,4) circle (1.5pt);
+                \draw [blue,fill] (axis cs: 3,1.5) circle (1.5pt);
+                %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:case2}
+    \end{subfigure}
+    
+    \newline
+    
+    \begin{subfigure}[h]{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.9]
+            \begin{axis}[xlabel={$x$},ylabel={$y$},
+                unit vector ratio*=1 1 1,
+                %width=18cm,
+                %height=30cm,
+                xtick={3},
+                xticklabels={$c$},
+                ytick={1.88704,3},
+                yticklabels={$L$,$f(c)$},
+                xmin=-1,xmax=7,ymin=-0.5,ymax=6,
+                every axis plot/.append style={very thick},
+                axis y line=middle,
+                axis x line=middle,
+                every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+                every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+                ]
+                %\node[] at (axis cs:3,3) {$y=f(x)$};
+                \draw[gray,dashed] (axis cs: 3,0) -- (axis cs: 3,3) -- (axis cs:0,3);
+                \draw[gray,dashed] (axis cs: 0,1.88704) -- (axis cs: 3,1.88704);
+                \addplot[blue,thick,domain=-4:10,samples=500,name path=A]{-sqrt(2+x)+sqrt(20-x)};
+                \draw [blue, fill=white] (axis cs: 3,1.88704) circle (1.5pt);
+                \draw [blue, fill] (axis cs: 3,3) circle (1.5pt);
+                %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:case3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[h]{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.9]
+            \begin{axis}[xlabel={$x$},ylabel={$y$},
+                unit vector ratio*=1 1 1,
+                %width=18cm,
+                %height=30cm,
+                xtick={3},
+                xticklabels={$c$},
+                ytick={2.68582},
+                yticklabels={$f(c)$},
+                xmin=-1,xmax=7,ymin=-0.5,ymax=6,
+                every axis plot/.append style={very thick},
+                axis y line=middle,
+                axis x line=middle,
+                every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+                every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+                ]
+                %\node[] at (axis cs:3,3) {$y=f(x)$};
+                \draw[gray,dashed] (axis cs: 3,0) -- (axis cs: 3,2.68582) -- (axis cs:0,2.68582);
+                %\draw[gray,dashed] (axis cs: 0,5) -- (axis cs: 2.9,5);
+                \addplot[blue,thick,domain=-2:8,samples=500,name path=A]{exp(pi*x/sqrt(100-x^2))};
+                %\addplot[blue,thick,domain=-4:3,samples=500]{(x+0.5)*(x-2)^2+0.5};
+                %\draw [blue, fill=white] (axis cs: 3,4) circle (1.5pt);
+                %\draw [blue,fill] (axis cs: 3,1.5) circle (1.5pt);
+                %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:case4}
+    \end{subfigure}
+    \caption{}
+    \label{fig:contfig}
+\end{figure}
+
+รูปที่ \ref{fig:case1} และ \ref{fig:case2} เป็นกรณีที่ $f(c)$ หาค่าได้ แต่ $\displaystyle\lim_{x\to c} f(x)$ ไม่มีค่า ดังนั้น $f$ ไม่ต่อเนื่องที่ $x=c$ \\
+รูปที่ \ref{fig:case3} เป็นกรณีที่ $f(c)$ หาค่าได้ และ $\displaystyle\lim_{x\to c} f(x)$ มีค่า แต่ $\displaystyle\lim_{x\to c} f(x) \neq f(c)$ ดังนั้น $f$ ไม่ต่อเนื่องที่ $x=c$\\
+รูปที่ \ref{fig:case4} เป็นกรณีที่ $f(c)$ หาค่าได้, \s$\displaystyle\lim_{x\to c} f(x)$ มีค่า และ $\displaystyle\lim_{x\to c} f(x) = f(c)$ ดังนั้น $f$ ต่อเนื่องที่ $x=c$\\
+
+เพราะฉะนั้น $f$ จะต่อเนื่องที่ $x=c$ ต้องมีคุณสมบัติ\textcolor{red}{ครบทั้งสามข้อ}ดังนี้
+\begin{enumerate}
+    \item $f(c)$ หาค่าได้
+    \item $\displaystyle\lim_{x\to c} f(x)$ มีค่า
+    \item $\displaystyle\lim_{x\to c} f(x) = f(c)$
+\end{enumerate}
+
+\newpage
+\underline{ตัวอย่าง 6} กำหนดให้  \s 
+$f(x) = \left\{ \begin{array}{ll}
+    \dfrac{x^3-8}{x-2} & \text{เมื่อ} \hspace{0.8mm} x<2 \\
+    12 & \text{เมื่อ} \hspace{0.8mm} x=2 \\
+    8x-4 & \text{เมื่อ} \hspace{0.8mm} x>2
+\end{array} 
+\right.$
+
+จงพิจารณาว่าฟังก์ชัน $f$ เป็นฟังก์ชันต่อเนื่องที่ $x=2$ หรือไม่ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm} จากโจทย์จะได้ว่า \s $f(2) = 12$
+
+\hspace{15mm} เนื่องจากฟังก์ชันถูกแบ่งช่วงที่ค่าที่พิจารณาลิมิต ดังนั้นจะต้องแยกคิดลิมิตดังนี้
+\begin{align*}
+    \lim_{x\to 2^{\scalebox{0.6}{$-$}}} f(x) & = \lim_{x\to 2^{\scalebox{0.6}{$-$}}} \frac{x^3-8}{x-2} \\
+    & = \lim_{x\to 2^{\scalebox{0.6}{$-$}}} \frac{(x-2)(x^2+2x+4)}{x-2} \\
+    & = \lim_{x\to 2^{\scalebox{0.6}{$-$}}} (x^2+2x+4) = 12
+\end{align*}
+
+\hspace{15mm} และ $\displaystyle\lim_{x\to 2^{\scalebox{0.6}{$+$}}} f(x) = \displaystyle\lim_{x\to 2^{\scalebox{0.6}{$+$}}} (8x-4) = 12$
+
+\hspace{15mm} จึงได้ว่า $\displaystyle\lim_{x\to2} f(x)=12$
+
+\hspace{15mm} เนื่องจาก $\displaystyle\lim_{x\to2} f(x) = f(2)$ \s ดังนั้น $f$ ต่อเนื่องที่ $x=2$ \hfill \qed
+
+%\vspace{1mm}
+\subsubsection{ทฤษฎีบทเกี่ยวกับความต่อเนื่องของฟังก์ชัน}
+\begin{tcolorbox}[sharp corners, colback=green!30, colframe=green!80!blue, title=\textbf{ทฤษฎีบท (ความต่อเนื่อง)}]
+    ถ้า $f$ และ $g$ เป็นฟังก์ชันต่อเนื่องที่ $x=a$ แล้ว  ฟังก์ชันต่อไปนี้จะเป็นฟังก์ชันต่อเนื่องที่ $x=a$ เช่นกัน
+    \begin{itemize}
+        \begin{multicols}{2}
+            \item $f+g$
+            \item $f-g$
+            \item $f\cdot g$
+            \item $\dfrac{f}{g}$ เมื่อ $g(a)\neq0$
+        \end{multicols}
+    \end{itemize}
+    \vspace{2mm}
+    สำหรับจำนวนจริง $a$ ใด ๆ และให้ $f$ และ $g$ เป็นฟังก์ชันพหุนามแล้ว
+    \begin{itemize}
+        \begin{multicols}{2}
+            \item ฟังก์ชันพหุนามใด ๆ ต่อเนื่องที่ $x=a$
+            \item $\dfrac{f}{g}$ ต่อเนื่องที่ $x=a$ เมื่อ $g(a)\neq0$
+        \end{multicols}
+    \end{itemize}
+\end{tcolorbox}
+\subsubsection{ความต่อเนื่องบนช่วง}
+นอกจากการพิจารณาความต่อเนื่องที่จุดใดจุดหนึ่งแล้ว เราสามารถพิจารณาความต่อเนื่องของฟังก์ชันบนช่วงได้ โดยแบ่งเป็นกรณีดังนี้
+\begin{itemize}
+    \item $f$ เป็นฟังก์ชันต่อเนื่องบนช่วง $(a,b)$ ก็ต่อเมื่อ $f$ เป็นฟังก์ชันต่อเนื่องที่ทุกจุดในช่วง $(a,b)$
+    \item กรณีที่ขอบของช่วงเป็นขอบแบบปิด
+    \begin{itemize}
+        \item ขอบล่างเป็นขอบปิด $[a,\_\_$:\hspace{2mm} $f$ ต่อเนื่องบนช่วงเปิด $(a,b)$ และ $\displaystyle\lim_{x\to a^{\scalebox{0.6}{$+$}}} f(x) = f(a)$
+        \item ขอบบนเป็นขอบปิด $\_\_,b]$:\hspace{2mm} $f$ ต่อเนื่องบนช่วงเปิด $(a,b)$ และ $\displaystyle\lim_{x\to b^{\scalebox{0.6}{$-$}}} f(x) = f(b)$
+    \end{itemize}
+\end{itemize}
+\newpage
+\underline{ตัวอย่าง 7} จงแสดงว่า \s $f(x)=\sqrt{x-2}+\sqrt{3-x}$ \s เป็นฟังก์ชันต่อเนื่องบนช่วง $[2,3]$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}\emph{ขั้นตอนที่ 1}: จะแสดงว่า $f$ ต่อเนื่องบนช่วง $(2,3)$
+
+\hspace{15mm} ให้ $c\in(2,3)$ ทำให้ \s $\sqrt{c-2}$ และ $\sqrt{3-c}$ มากกว่า $0$ 
+
+\hspace{15mm} จะได้ว่า $f$ นิยามที่ $x=c$ และ $f(c)=\sqrt{c-2}+\sqrt{3-c}$ 
+\begin{align*}
+    \lim_{x\to c} f(x) & = \lim_{x\to c} \left( \sqrt{x-2}+\sqrt{3-x} \right) \\ 
+    & = \lim_{x\to c}\sqrt{x-2}+\lim_{x\to c}\sqrt{3-x} \\ 
+    & = \sqrt{\lim_{x\to c}(x-2)}+\sqrt{\lim_{x\to c}(3-x)} \\ 
+    & = \sqrt{c-2}+\sqrt{3-c} = f(c)
+\end{align*}
+\hspace{15mm} ดังนั้น \s $f$ ต่อเนื่องบนช่วง $(2,3)$
+
+\vspace{1mm}
+\hspace{15mm} \emph{ขั้นตอนที่ 2}: พิจารณาลิมิตที่ค่าขอบ
+
+\hspace{15mm} เนื่องจาก $f(2) = 1$ และ
+\begin{align*}
+   \lim_{x\to2^{\scalebox{0.6}{$+$}}} f(x) & = \lim_{x\to2^{\scalebox{0.6}{$+$}}} \left( \sqrt{x-2}+\sqrt{3-x} \right) \\
+   & = \lim_{x\to2^{\scalebox{0.6}{$+$}}}\sqrt{x-2}+\lim_{x\to2^{\scalebox{0.6}{$+$}}}\sqrt{3-x} \\
+   & = \sqrt{\lim_{x\to2^{\scalebox{0.6}{$+$}}}(x-2)}+\sqrt{\lim_{x\to2^{\scalebox{0.6}{$+$}}}(3-x)} \\
+   & = 1 = f(2)
+\end{align*}
+\hspace{15mm} และเนื่องจาก $f(3)=1$ และ
+\begin{align*}
+   \lim_{x\to3^{\scalebox{0.6}{$-$}}} f(x) & = \lim_{x\to3^{\scalebox{0.6}{$-$}}} \left( \sqrt{x-2}+\sqrt{3-x} \right) \\
+   & = \lim_{x\to3^{\scalebox{0.6}{$-$}}}\sqrt{x-2}+\lim_{x\to3^{\scalebox{0.6}{$-$}}}\sqrt{3-x} \\
+   & = \sqrt{\lim_{x\to3^{\scalebox{0.6}{$-$}}}(x-2)}+\sqrt{\lim_{x\to3^{\scalebox{0.6}{$-$}}}(3-x)} \\
+   & = 1 = f(3)
+\end{align*}
+\hspace{15mm} ดังนั้น $f$ เป็นฟังก์ชันต่อเนื่องบนช่วง $[2,3]$ \hfill\qed
+
+\newpage
+\underline{\large แบบฝึกหัด 2}
+\begin{enumerate}
+    \item จงพิจารณาว่าฟังก์ชันต่อไปนี้เป็นฟังก์ชันต่อเนื่อง ณ จุดที่กำหนดหรือไม่
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $f(x) = \left\{ \begin{array}{ll}
+        \dfrac{x^2-4}{\sqrt{2x}-2} & \hspace{0.8mm} ,x<2 \\[0.5ex]
+        10-x &  \hspace{0.8mm} ,x\geq2
+        \end{array} 
+        \right.$ \hspace{1.5mm} ที่ $x=2$
+        \vspace{55mm}
+        \item $f(x) = \left\{ \begin{array}{ll}
+        \dfrac{|4-6x|}{5x-\dfrac{10}{3}} &  \hspace{0.8mm} ,x\neq\dfrac{2}{3} \\[5ex]
+        -\dfrac{6}{5} &  \hspace{0.8mm} ,x=\dfrac{2}{3}
+        \end{array} 
+        \right.$ \hspace{1.5mm} ที่ $x=\dfrac{2}{3}$
+    \end{enumerate}
+    \vspace{50mm}
+    \Jitem กำหนดให้ $f(x)=\lfloor x \rfloor$ \s เมื่อ $\lfloor x \rfloor$ คือจำนวนเต็มที่มากที่สุดที่น้อยกว่าหรือเท่ากับ $x$ \s แล้วจงพิจารณาว่า $f$ ไม่ต่อเนื่องที่จุดใดบ้าง [Hint: วาดกราฟประกอบ]
+\end{enumerate}
+
+\newpage
+\section{อนุพันธ์ของฟังก์ชัน}
+\subsection{อัตราการเปลี่ยนแปลง}
+อัตราการเปลี่ยนแปลงแบ่งออกเป็น อัตราการเปลี่ยนแปลงเฉลี่ย และ อัตราการเปลี่ยนแปลงขณะหนึ่ง ซึ่งมีบทนิยามดังนี้
+
+\begin{tcolorbox}[title=\textbf{บทนิยาม}]
+    ให้ $f$ เป็นฟังก์ชัน และ $a$ อยู่ในโดเมนของ $f$ \\
+    \emph{อัตราการเปลี่ยนแปลงเฉลี่ย (average rate of change)} ของ $f$ เทียบกับ $x$ เมื่อ $x$ เปลี่ยนจาก $a$ เป็น $a+h$ คือ
+    \begin{equation*}
+        \frac{f(a+h)-f(a)}{h}
+    \end{equation*}
+    
+    \emph{อัตราการเปลี่ยนแปลง (instantaneous rate of change)} ของ $f$ เทียบกับ $x$ ขณะที่ $x=a$ คือ
+    \begin{equation*}
+        \lim_{h\to0} \frac{f(a+h)-f(a)}{h}
+    \end{equation*}
+\end{tcolorbox}
+
+\vspace{2mm}
+\underline{ตัวอย่าง 8} จงหาอัตราการเปลี่ยนแปลงเฉลี่ยของ $g(x)=\sqrt{x+3}$ เมื่อ $x$ เปลี่ยนจาก $1$ เป็น $6$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}จากนิยาม จะได้อัตราการเปลี่ยนแปลงเฉลี่ยที่ต้องการมีค่าเท่ากับ 
+
+\vspace{1mm}
+\hspace{15mm} $\dfrac{g(6)-g(1)}{6-1}=\dfrac{\sqrt{6+3}-\sqrt{1+3}}{6-1} = \dfrac{1}{5}$ \hfill \qed
+
+\vspace{5mm}
+\underline{ตัวอย่าง 9} จงหาอัตราการเปลี่ยนแปลงของพื้นที่รูปสี่เหลี่ยมจัตุรัสเทียบกับเส้นทแยงมุมของรูปสี่เหลี่ยม เมื่อความยาวด้านเปลี่ยนแปลงจาก $1$ หน่วย เป็น $3$ หน่วย \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}ให้ $A(x)$ แทนพื้นที่ของรูปสี่เหลี่ยมจัตุรัสที่มีเส้นทแยงมุมยาว $x$ หน่วย \s นั่นคือ $A(x)=\dfrac{x^2}{2}$
+
+\hspace{15mm} เนื่องจาก เส้นทแยงมุม$=\sqrt{2}\times$ความยาวด้าน
+
+\hspace{15mm} ดังนั้น อัตราการเปลี่ยนแปลงของ $A(x)$ เทียบกับ $x$ เมื่อ $x$ เปลี่ยนจาก $\sqrt{2}$ เป็น $3\sqrt{2}$ คือ
+\begin{align*}
+    \frac{A(3\sqrt{2})-A(\sqrt{2})}{3\sqrt{2}-\sqrt{2}}& = \frac{\frac{(3\sqrt{2})^2}{2}-\frac{(\sqrt{2})^2}{2}}{2\sqrt{2}} \\
+    & = 2\sqrt{2} \hspace{5mm} \text{ตารางหน่วยต่อหน่วย} 
+    \tag*\qed
+\end{align*}
+%\vspace{1mm}
+\newpage
+\subsection{อนุพันธ์}
+\begin{tcolorbox}[title=\textbf{บทนิยาม}]
+    สำหรับฟังก์ชัน $f$ ใด ๆ \s \emph{อนุพันธ์ (derivative) ของ $f$ ที่ $x$} คือ
+    \begin{equation*}
+        \frac{d}{dx}f(x) = f'(x) = \lim_{h\to0} \frac{f(x+h)-f(x)}{h}
+    \end{equation*}
+    และอนุพันธ์ของ $f$ ที่ $x=a$ เขียนแทนด้วย
+    \begin{equation*}
+        \frac{d}{dx}f(x)\Bigr|_{x=a} = f'(a) = \lim_{h\to0} \frac{f(a+h)-f(a)}{h}
+    \end{equation*}
+\end{tcolorbox}
+
+\vspace{2mm}
+จะเห็นว่าอนุพันธ์ก็คืออัตราการเปลี่ยนแปลงขณะใด ๆ นั่นเอง \s นอกจากนี้ฟังก์ชันจะมีอนุพันธ์หรือไม่ขึ้นอยู่กับว่าลิมิตดังกล่าวมีค่าหรือไม่มีค่า
+
+\vspace{2mm}
+\underline{ตัวอย่าง 10} กำหนดให้ $f(x)=\dfrac{1}{x^2}-x^3+2x$ จงหา $f'(x)$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}จากนิยามของอนุพันธ์ จะสามารถหาอนุพันธ์ของฟังก์ชันดังกล่าวได้ดังนี้
+\begin{align*}
+    f'(x) & = \lim_{h\to0}\frac{f(x+h)-f(x)}{h} \\
+    & = \lim_{h\to0}\frac{\dfrac{1}{(x+h)^2}-(x+h)^3+2(x+h)-\dfrac{1}{x^2}+x^3-2x}{h} \\
+    & = \lim_{h\to0}\frac{\left(\dfrac{1}{(x+h)^2}-\dfrac{1}{x^2}\right)+\left(-(x+h)^3+2(x+h)+x^3-2x\right)}{h} \\
+    & = \lim_{h\to0}\frac{\dfrac{x^2-(x^2+2xh+h^2)}{x^2(x+h)^2}+(-3x^2h-3xh^2-h^3+2h)}{h} \\
+    & = \lim_{h\to0} \frac{-2x-h}{x^2(x+h)^2}+(-3x^2-3xh-h^2+2) \\[0.5ex]
+    & = -\frac{2}{x^3}-3x^2+2
+    \tag*\qed
+\end{align*}
+\newpage
+\underline{\large แบบฝึกหัด 3}
+\begin{enumerate}
+    \item ระยะทางการขับรถของชายคนหนึ่งสามารถอธิบายได้ด้วยสมการ $d(t)=5t^3+6t^2+30t$ กิโลเมตร เมื่อ $t\in [0,3]$ เป็นเวลาในหน่วยชั่วโมง จงหา
+    \begin{multicols}{2}
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item อัตราเร็วเฉลี่ยตลอดการเดินทาง $3$ ชั่วโมง
+        \vspace{40mm}
+        \item อัตราเร็วเฉลี่ยใน $30$ นาทีแรก 
+        %\vspace{40mm}
+        \item อัตราเร็วขณะนาทีที่ $30$ 
+        \vspace{40mm}
+        \item อัตราเร็วขณะที่ $t=2.5$ ชั่วโมง
+    \end{enumerate}
+    \end{multicols}
+    \vspace{40mm}
+    \item จงหาอนุพันธ์ของฟังก์ชันต่อไปนี้
+    \begin{multicols}{2}
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $f(x)=\sqrt{2x+1}$
+        \vspace{45mm}
+        \item $f(x)=\dfrac{1}{\nr{3}{x}}$ \s เมื่อ \s $x\neq0$
+        %\vspace{40mm}
+        \item $f(x)=x^n$ \s เมื่อ \s $n\in \mathbb{N}$
+        \vspace{45mm}
+        \item $f(x)=\nr{4}{3x-2}$
+    \end{enumerate}
+    \end{multicols}
+    \newpage
+    \item กำหนดให้ 
+    $g(x) = \left\{ \begin{array}{ll}
+        \sqrt{4x+8} & \hspace{0.8mm} ,-2\leq x\leq2 \\[0.5ex]
+        2x+\dfrac{6}{x}-3 &  \hspace{0.8mm} ,x>2
+        \end{array} 
+        \right.$ \\[0.8ex]
+    จงพิจารณาว่า $g$ มีอนุพันธ์ที่ $x=2$ หรือไม่ ถ้ามี ให้หาค่าด้วย
+    \vspace{70mm}
+    \item จงหาค่าของ $f'(-1)$ เมื่อกำหนด $f$ ในแต่ละข้อดังนี้
+    \begin{multicols}{2}
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $f(x)=(x^2-1)(x^3+2)$
+        \vspace{60mm}
+        \item $f(x)=|x+1|-x^2$
+        %\vspace{40mm}
+        \item $f(x)=\dfrac{1}{\sqrt{x^2+3}}$
+        \vspace{60mm}
+        \item $f(x)=(x^4-x)^2$
+    \end{enumerate}
+    \end{multicols}
+\end{enumerate}
+\newpage
+\subsubsection{การหาอนุพันธ์โดยใช้สูตร}
+ก่อนหน้านี้ได้ศึกษาวิธีการหาอนุพันธ์โดยนิยามมาแล้ว เห็นได้ชัดว่าการจะได้มาซึ่งอนุพันธ์มีความยุ่งยาก ในหัวข้อนี้จะนำเสนอสูตรสำหรับการหาอนุพันธ์สำหรับบางฟังก์ชันดังนี้
+
+\begin{tcolorbox}[sharp corners, colback=green!30, colframe=green!80!blue]
+    กำหนดให้ $f$ และ $g$ เป็นฟังก์ชันที่หาอนุพันธ์ได้, $n\in\mathbb{R}$ และ $c$ เป็นค่าคงที่
+    
+    \vspace{1.5mm}
+    \begin{minipage}{0.35\textwidth}
+    \begin{enumerate}
+        \item $y=c$ 
+        \item $y=x^n$
+        \item $y=c\cdot f(x)$
+        \item $y=f(x)\pm g(x)$
+        \item $y=f(x)g(x)$
+        \item $y=\dfrac{f(x)}{g(x)}$
+    \end{enumerate}
+    \end{minipage}
+    \begin{minipage}{0.45\textwidth}
+    \begin{itemize}[label={จะได้ว่า \hspace{0.5mm}}]
+        \item $y'=0$ 
+        \item $y'=nx^{n-1}$
+        \item $y'=c\cdot f'(x)$
+        \item $y'=f'(x)\pm g'(x)$
+        \item $y'=f(x)g'(x)+g(x)f'(x)$
+        \item $y'=\dfrac{g(x)f'(x)-f(x)g'(x)}{\left(g(x)\right)^2}$
+    \end{itemize}
+    \end{minipage}
+\end{tcolorbox}
+
+\vspace{2mm}
+\underline{ตัวอย่าง 11} จงหา $f'(x)$ เมื่อกำหนดให้ $f(x)=\dfrac{\sqrt{x}}{2x+1}$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}ใช้สูตรอนุพันธ์ของฟังก์ชันที่หารกันได้ดังนี้
+\begin{align*}
+    f'(x) & = \frac{(2x+1)\ddx\sqrt{x}-\sqrt{x}\ \ddx(2x+1)}{(2x+1)^2} \\[0.5ex]
+    & = \frac{(2x+1)\left(\dfrac{1}{2}x^{\scriptscriptstyle \frac{1}{2}-1}\right)-\sqrt{x}(2+0)}{(2x+1)^2} \\[0.5ex]
+    & = \frac{\dfrac{2x+1}{\sqrt{x}}-4\sqrt{x}}{2(2x+1)^2} \\[0.5ex]
+    f'(x) & = \frac{1-2x}{2\sqrt{x}(2x+1)^2} 
+    \tag*\qed
+\end{align*}
+\newpage
+\underline{\large แบบฝึกหัด 4}
+\begin{enumerate}
+    \item จงหาอนุพันธ์ของฟังก์ชันต่อไปนี้
+    \begin{multicols}{2}
+    \begin{enumerate}[label={\arabic{enumii})}]
+        \item $f(x)=\dfrac{x^5-3x^2+5x-2}{x^3}$
+        \vspace{60mm}
+        \item $f(x)=\left( x^2-\dfrac{6}{\sqrt{x}}+1 \right)\left(\nr{4}{x}-\dfrac{2}{x}\right)$
+        \item $g(x)=\dfrac{x^2+x+1}{\nr{3}{x}+x-1}$
+        \vspace{60mm}
+        \item $g(x)=(3x^2-2x)\left(\dfrac{5x-3}{x+4}\right)$
+    \end{enumerate}
+    \end{multicols}
+    \vspace{60mm}
+    %\item กำหนดให้ $f(x)=A(x-1)(x-2)(x-3)(x-4)$ และ $f(0)=4$ แล้วจงหาค่าของ $f'(3)$
+    %\vspace{40mm}
+    \item กำหนดให้ $f$ เป็นฟังก์ชันพหุนามซึ่งมี $1,\s2,\s...,2022$ เป็นราก และ $f(0)=4$ แล้วจงหาค่าของ $f'(3)$
+\end{enumerate}
+\newpage
+\subsubsection{กฎลูกโซ่}
+การหาอนุพันธ์ของฟังก์ชันประกอบหากคิดโดยการใช้สูตรปกติหรือใช้นิยามของอนุพันธ์จะมีความยุ่งยากมาก ดังนั้นกฎลูกโซ่ที่จะกล่าวถึงต่อไปนี้จะช่วยให้การหาอนุพันธ์ของฟังก์ชันประกอบทำได้ง่ายขึ้น
+\begin{tcolorbox}[title=\textbf{กฎลูกโซ่ (Chain rule)}]
+    ให้ $y=f(u)$ เป็นฟังก์ชันที่หาอนุพันธ์ได้ที่ $u$ และ $u=g(x)$ เป็นฟังก์ชันที่หาอนุพันธ์ได้ที่ $x$ แล้ว $y=f\left(g(x)\right)$ หาอนุพันธ์ได้ที่ $x$ ซึ่งมีค่าเท่ากับ
+    \begin{equation*}
+        \dx{y} = \dfrac{dy}{du}\cdot\dx{u} = f'\left(g(x)\right)g'(x)
+    \end{equation*}
+\end{tcolorbox}
+
+\vspace{2mm}
+\underline{ตัวอย่าง 12} จงหา $f'(x)$ เมื่อกำหนดให้ $f(x)=\nr{3}{1-x^2}$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}ให้ $u=1-x^2$ และ $y=f(x)$
+
+\hspace{15mm} จะได้ว่า $y=\nr{3}{u}=u^{\scriptscriptstyle \frac{1}{3}}$ \s ดังนั้น
+\begin{align*}
+    \dx{y} & = \frac{dy}{du}\cdot\dx{u} \\[0.5ex]
+    & = \frac{d}{du}(u^{\scriptscriptstyle \frac{1}{3}})\cdot \ddx (1-x^2) \\[0.5ex]
+    & = \frac{1}{3}u^{\scriptscriptstyle -\frac{2}{3}}\cdot (0-2x) \\[0.5ex]
+    & = -\frac{2x}{3\nr{3}{(1-x^2)^2}}
+\end{align*}
+\hspace{15mm} เพราะฉะนั้น $f'(x)=-\dfrac{2x}{3\nr{3}{(1-x^2)^2}}$ \hfill\qed
+
+\vspace{2mm}
+\underline{\large แบบฝึกหัด 5}
+\begin{enumerate}
+    \item กำหนดให้ $x(t)=\dfrac{20t}{1+2t^2}$ และ $P(x)=x\sqrt{x}+\dfrac{3}{x}-10$ \s แล้วจงหาค่าของ $\dfrac{dP}{dt}\bigg|_{t=2}$
+\end{enumerate}
+\newpage
+\subsection{ความหมายเชิงเรขาคณิตของอนุพันธ์}
+กำหนดให้ $y=f(x)$ เป็นเส้นโค้งใด ๆ และ $a$ อยู่ในโดเมนของ $f$
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={3.5},
+            xticklabels={$a$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-1,xmax=7,ymin=-0.5,ymax=6,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:4,5) {$y=f(x)$};
+            \node[] at (axis cs:6.2,4.5) {$L$};
+            %\draw[gray,dashed] (axis cs: 0,5) -- (axis cs: 2.9,5);
+            %\addplot[blue,thick,domain=3.025:10,samples=500,name path=A]{-0.125*(x-5)^2+5.5};
+            \addplot[blue,thick,domain=-4:8,samples=500]{2^(x-3)+1};
+            \addplot[red,thick,domain=2:6,samples=500]{(ln(2)*2^0.5)*(x-3.5)+2^0.5+1};
+            \draw [orange, fill] (axis cs: 3.5,2.414) circle (1.8pt) node[below right] {\color{black}{$(a,f(a))$}};
+            %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+            %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+ในทางเรขาคณิต อนุพันธ์ของฟังก์ชัน หรือ $f'(x)$ คือค่าความชันของเส้นโค้ง $y=f(x)$ \\
+จากภาพจะเห็นว่า $L$ เป็นเส้นสัมผัสเส้นโค้ง $y=f(x)$ ที่จุด $(a,f(a))$  ดังนั้นความชันของเส้นตรง $L$ จึงมีค่าเท่ากับความชันของเส้นโค้ง $y=f(x)$ ที่ตำแหน่ง $x=a$ กล่าวคือ
+\begin{center}
+\begin{tcolorbox}[width=12cm,colback=red!10,colframe=red!90!blue]
+    ความชันของเส้นสัมผัสเส้นโค้ง $y=f(x)$ ที่ตำแหน่ง $x=a$ \s \textbf{เท่ากับ} \s $f'(a)$
+\end{tcolorbox}
+\end{center}
+\vspace{1mm}
+\subsection{อนุพันธ์อันดับสูง}
+กำหนดให้ $y=f(x)$ เป็นฟังก์ชัน และ $n$ เป็นจำนวนเต็มบวกใดๆ แล้ว \emph{อนุพันธ์อันดับสูง} คือ การหาอนุพันธ์ของฟังก์ชันมากกว่า 1 ครั้ง เช่น อนุพันธ์อันดับสองของ $f$ หมายถึง อนุพันธ์ของ $f'$ เป็นต้น
+
+สัญลักษณ์ของอนุพันธ์อันดับสูงเป็นดังนี้
+\begin{itemize}
+    \item อนุพันธ์อันดับ $2$ ของ $y=f(x)$ \s เขียนแทนด้วย $f''(x)$ หรือ $y''$ หรือ $\dfrac{d^2y}{dx^2}$
+    \item อนุพันธ์อันดับ $3$ ของ $y=f(x)$ \s เขียนแทนด้วย $f'''(x)$ หรือ $y'''$ หรือ $\dfrac{d^3y}{dx^3}$
+    \item อนุพันธ์อันดับ $4$ ของ $y=f(x)$ \s เขียนแทนด้วย $f^{(4)}(x)$ หรือ $y^{(4)}$ หรือ $\dfrac{d^4y}{dx^4}$
+    \item[\empty]\hspace{20.5mm} $\vdots$
+    \item อนุพันธ์อันดับ $n$ ของ $y=f(x)$ \s เขียนแทนด้วย $f^{(n)}(x)$ หรือ $y^{(n)}$ หรือ $\dfrac{d^ny}{dx^n}$
+\end{itemize}
+\newpage
+\underline{\large แบบฝึกหัด 6} 
+\begin{enumerate}
+    \item จงหาสมการเส้นตรงซึ่งสัมผัสกับเส้นโค้ง $y=\nr{4}{3x+1}-\dfrac{1}{2\sqrt{x-1}}+x+3$ \s ที่ $x=5$
+    \vspace{50mm}
+    \Jitem กำหนดให้ $L_1$ เป็นเส้นสัมผัสเส้นโค้ง $y=-2x^3+x^2+10x-9$ ที่ตำแหน่ง $x=-1$ \s และให้ $L_2$ เป็นเส้นตรงที่ตั้งฉากกับ $L_1$ และสัมผัสกับเส้นโค้งดังกล่าวที่จุด $(a,b)$ โดยที่ $a>0$ \s แล้วจงหาค่าของ \s $4a+6b$
+    \vspace{60mm}
+    \item กำหนดให้ $f$ และ $g$ เป็นฟังก์ชันซึ่ง 
+    \begin{itemize}
+        \item $f(1)=0$ และ $g(1)=2$
+        \item ความชันของเส้นโค้ง $f$ และ $g$ ที่ตำแหน่ง $x=1$ มีค่าเท่ากับ $2$ และ $-3$ ตามลำดับ
+        \item อัตราการเปลี่ยนแปลงของความชันเส้นโค้งของ $f$ และ $g$ เทียบกับ $x$ ขณะที่ $x=1$ มีค่าเท่ากับ $-10$ และ $-4$ ตามลำดับ
+    \end{itemize}
+    แล้วจงหาค่าของ \s $\ddx\left(f'(x)g(x)+\dfrac{f(x)}{g'(x)}\right)\bigg|_{x=1}$
+\end{enumerate}
+\newpage
+\subsection{การประยุกต์ของอนุพันธ์}
+\subsubsection{การเคลื่อนที่แนวตรง}
+ในการเคลื่อนที่แนวตรงจะมีปริมาณ 3 ชนิดที่เกี่ยวข้องกับเวลา ได้แก่ ตำแหน่ง ความเร็ว และความเร่งของวัตถุ ให้ $s(t),\s v(t)$ และ $a(t)$ แทนฟังก์ชันที่บอกตำแหน่ง ความเร็ว และความเร่งของวัตถุที่เวลา $t$ ใด ๆ ตามลำดับ\\
+เนื่องจากความเร็วของวัตถุคือ อัตราการเปลี่ยนแปลงของการกระจัดเทียบกับเวลาขณะเวลาหนึ่ง และ ความเร่งของวัตถุคือ อัตราการเปลี่ยนแปลงของความเร็วเทียบกับเวลาขณะเวลาหนึ่ง ดังนั้น จะได้ความสัมพันธ์ระหว่างตำแหน่ง ความเร็ว และความเร่งเป็นดังนี้
+\begin{center}
+\begin{tcolorbox}[width=10cm,colback=red!10,colframe=red!90!blue]
+    \begin{tikzpicture}
+        \node[circle,inner sep=2pt] (s) at (0,0) {$s(t)$};
+        \node[circle,inner sep=2pt] (v) at (4,0) {$v(t)$};
+        \node[circle,inner sep=2pt] (a) at (8,0) {$a(t)$};
+        \draw[-stealth] (s.east) -- (v.west);
+        \draw[-stealth] (v.east) -- (a.west);
+        \node[] at (2,0.3) {$\frac{d}{dt}$};
+        \node[] at (6,0.3) {$\frac{d}{dt}$};
+    \end{tikzpicture}
+\end{tcolorbox}
+\end{center}
+\subsubsection{ฟังก์ชันเพิ่ม ฟังก์ชันลด}
+ในเนื้อหาเรื่องฟังก์ชันเราได้ศึกษามาแล้วว่าฟังก์ชันเพิ่ม คือ ฟังก์ชันที่เมื่อค่า $x$ เพิ่มขึ้น แล้วค่าของฟังก์ชันจะเพิ่มขึ้น ส่วนฟังก์ชันลด คือ ฟังก์ชันที่เมื่อค่า $x$ เพิ่มขึ้นแล้วค่าของฟังก์ชันจะลดลง
+
+แต่สำหรับฟังก์ชันโดยทั่วไปนั้น จะมีลักษณะที่ไม่เป็นทั้งฟังก์ชันเพิ่มและลด เพราะ ในฟังก์ชันหนึ่ง ๆ อาจมีช่วงหนึ่งที่มีลักษณะเพิ่ม ในขณะที่อีกช่วงหนึ่งมีลักษณะลดดังเช่นตัวอย่างกราฟด้านล่าง
+
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick=\empty,
+            %xticklabels={$a$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-4,xmax=6,ymin=-1,ymax=6,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:3,5) {\scalebox{0.8}{$y=f(x)$}};
+            \node[] at (axis cs:6.2,4.5) {$L$};
+            \node[] at (axis cs:-2.68143,-0.7) {\textcolor{green!60!black}{ลด}};
+            \node[] at (axis cs:-0.478,-0.5) {\textcolor{green!60!black}{เพิ่ม}};
+            \node[] at (axis cs:1.74393,-0.7) {\textcolor{green!60!black}{ลด}};
+            \node[] at (axis cs:4.54051,-0.5) {\textcolor{green!60!black}{เพิ่ม}};
+            \draw[gray,dashed] (axis cs:-1.36286,2.83075) -- (axis cs:-1.36286,-1);
+            \draw[gray,dashed] (axis cs:0.406841,4.1458) -- (axis cs:0.406841,-1);
+            \draw[gray,dashed] (axis cs:3.08102,0.184898) -- (axis cs:3.08102,-1);
+            %\draw[green!60!black,stealth-stealth] (axis cs:-1.36285,-0.6) -- (axis cs:0.40684,-0.6); 
+            %\addplot[blue,thick,domain=3.025:10,samples=500,name path=A]{-0.125*(x-5)^2+5.5};
+            \addplot[blue,thick,domain=-4:7,samples=500]{0.05*(x+5/3)*(x+1)*(2*x-3)*(x-4)+3};
+            %\addplot[red,thick,domain=2:6,samples=500]{(ln(2)*2^0.5)*(x-3.5)+2^0.5+1};
+            %\draw [orange, fill] (axis cs: 3.5,2.414) circle (1.8pt) node[below right]; {\color{black}{$(a,f(a))$}};
+            %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+            %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+\vspace{1mm}
+กำหนดให้ $f$ เป็นฟังก์ชัน และ $A$ เป็นสับเซตของโดเมนของ $f$ แล้วเราจะกล่าวว่า
+\begin{itemize}
+    \item $f$ เป็น \emph{ฟังก์ชันเพิ่ม (increasing function)} บนเซต $A$ ก็ต่อเมื่อ \s สำหรับทุก $x_1,\s x_2\in A$ ถ้า $x_1<x_2$ แล้ว \s $f(x_1)<f(x_2)$
+    \item $f$ เป็น \emph{ฟังก์ชันลด (decreasing function)} บนเซต $A$ ก็ต่อเมื่อ \s สำหรับทุก $x_1,\s x_2\in A$ ถ้า $x_1<x_2$ แล้ว \s $f(x_1)>f(x_2)$
+\end{itemize}
+จากเงื่อนไขข้างต้น หาก $f$ หาอนุพันธ์ได้บนช่วง $A$ เราจะสามารถใช้ความรู้เรื่องลิมิตเพื่อให้ได้ข้อสรุปดังนี้
+\begin{center}
+\begin{tcolorbox}[width=12cm]
+\begin{itemize}
+    \renewcommand{\labelitemi}{$*$}
+    \item ถ้า $f'(x)>0$ สำหรับทุก $x\in A$ \s แล้ว $f$ เป็นฟังก์ชันเพิ่มบน $A$
+    \item ถ้า $f'(x)<0$ สำหรับทุก $x\in A$ \s แล้ว $f$ เป็นฟังก์ชันลดบน $A$
+\end{itemize}
+\end{tcolorbox}
+\end{center}
+
+
+\newpage
+\subsubsection{ค่าสูงสุดและค่าต่ำสุด}
+ในหัวข้อนี้จะกล่าวถึงการนำอนุพันธ์มาประยุกต์ใช้หาจุดสูงสูด จุดต่ำสุดของฟังก์ชัน พิจารณากราฟของฟังก์ชัน $f$ และ $g$ ด้านล่าง
+
+\begin{figure}[h]
+    \label{fig:extremum}
+    \begin{subfigure}[h]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={-3.6,-1,7/3,16/3},
+            xticklabels={$a$,$c$,$d$,$b$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-4,xmax=6,ymin=-1,ymax=8,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:3,5) {\scalebox{0.8}{$y=f(x)$}};
+            %\node[] at (axis cs:6.2,4.5) {$L$};
+            %\draw[green!60!black,stealth-stealth] (axis cs:-1.36285,-0.6) -- (axis cs:0.40684,-0.6); 
+            \draw[gray,dashed] (axis cs:-3.6,0) -- (axis cs:-3.6,0.62);
+            \draw[gray,dashed] (axis cs:-1,0) -- (axis cs:-1,4);
+            \draw[gray,dashed] (axis cs:7/3,0) -- (axis cs:7/3,2/3);
+            \draw[gray,dashed] (axis cs:16/3,0) -- (axis cs:16/3,90/12);
+            \addplot[blue,thick,domain=-3.6:1,samples=500]{-0.5*(x+1)^2+4};
+            \addplot[blue,thick,domain=1:16/3,samples=500]{0.75*(x-7/3)^2+2/3};
+            %\addplot[blue] coordinates{(-3.5,7/8)};
+            %^\addplot[blue] coordinates{(19/3,38/3)};
+            %\addplot[red,thick,domain=2:6,samples=500]{(ln(2)*2^0.5)*(x-3.5)+2^0.5+1};
+            \draw [blue, fill] (axis cs: -3.6,0.62) circle (1.8pt); %node[below right]; {\color{black}{$(a,f(a))$}};
+            \draw [blue, fill] (axis cs: 16/3,90/12) circle (1.8pt);
+            %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+            %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+        \caption{}
+        \label{fig:3order}
+    \end{subfigure}
+    \hspace{3mm}
+    \begin{subfigure}[h]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=2.8 1.2 1,
+            %width=18cm,
+            height=8.5cm,
+            xtick={-2.35,-1.69436,0.208252,2.31933,4.02012,4.7},
+            %xtick={-1.69436,2.31933,4.7}
+            xticklabels={$a$,$c$,$d$,$e$,$f$,$b$},
+            %xticklabels={$c$,$e$,$b$},
+            %extra x ticks={-2.35,0.208252,4.02012},
+            %extra x tick labels={$a$,$d$,$f$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-4,xmax=6,ymin=-5.5,ymax=8,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            %x tick label style={left},
+            xticklabel style={xshift=0.1cm,yshift=0.1cm},
+            %extra x tick style={xticklabel style={yshift=0.5ex,anchor=south}},
+            ]
+            \node[] at (axis cs:4.7,6.1) {\scalebox{0.8}{$y=g(x)$}};
+            %\node[] at (axis cs:6.2,4.5) {$L$};
+            %\draw[green!60!black,stealth-stealth] (axis cs:-1.36285,-0.6) -- (axis cs:0.40684,-0.6); 
+            %\addplot[blue,thick,domain=3.025:10,samples=500,name path=A]{-0.125*(x-5)^2+5.5};
+            \draw[gray,dashed] (axis cs:-2.35,0) -- (axis cs:-2.35,-2.61181);
+            \draw[gray,dashed] (axis cs:-1.69436,0) -- (axis cs:-1.69436,7.76394);
+            \draw[gray,dashed] (axis cs:0.208252,0) -- (axis cs:0.208252,-4.9498);
+            \draw[gray,dashed] (axis cs:2.31933,0) -- (axis cs:2.31933,4.37711);
+            \draw[gray,dashed] (axis cs:4.02012,0) -- (axis cs:4.02012,-4.57055);
+            \draw[gray,dashed] (axis cs:4.7,0) -- (axis cs:4.7,5.30735);
+            \addplot[blue,thick,domain=-2.35:4.7,samples=500]{0.05*(3*x+7)*(x+0.5)*(x-1)*(x-3.5)*(x-4.4)-2};
+            %\addplot[blue,thick,domain=1:16/3,samples=500]{0.75*(x-7/3)^2+2/3};
+            %\addplot[blue] coordinates{(-3.5,7/8)};
+            %^\addplot[blue] coordinates{(19/3,38/3)};
+            %\addplot[red,thick,domain=2:6,samples=500]{(ln(2)*2^0.5)*(x-3.5)+2^0.5+1};
+            \draw [blue, fill] (axis cs: -2.35,-2.61181) circle (1.8pt); %node[below right]; {\color{black}{$(a,f(a))$}};
+            \draw [blue, fill] (axis cs: 4.7,5.30735) circle (1.8pt);
+            %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+            %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+        \caption{}
+        \label{fig:5order}
+    \end{subfigure}
+    \caption{}
+\end{figure}
+ในที่นี้จะมีคำศัพท์เกี่ยวกับค่าสูงสุดและค่าต่ำสุดอยู่สองประเภท ได้แก่
+
+กำหนดให้ $\epsilon$ เป็นจำนวนจริงบวกที่มีค่าน้อย และ $D_f$ แทนโดเมนของ $f$
+\begin{itemize}
+    \item \textbf{\emph{จุดต่ำสุดสัมพัทธ์ (relative minimum point)}} 
+    \begin{itemize}
+        \item คือ จุด $(k,f(k))$ ซึ่ง $f(x)\geq f(k)$ สำหรับทุก $x\in[k-\epsilon,k+\epsilon]$
+        \item \textcolor{orange}{เป็นจุดที่ต่ำที่สุดเมื่อเทียบกับจุดใกล้ ๆ}
+    \end{itemize}
+    \item \textbf{\emph{จุดสูงสุดสัมพัทธ์ (relative maximum point)}} 
+    \begin{itemize}
+        \item คือ จุด $(k,f(k))$ ซึ่ง $f(x)\leq f(k)$ สำหรับทุก $x\in[k-\epsilon,k+\epsilon]$
+        \item \textcolor{orange}{เป็นจุดที่สูงที่สุดเมื่อเทียบกับจุดใกล้ ๆ}
+    \end{itemize}
+    \item \textbf{\emph{จุดต่ำสุดสัมบูรณ์ (absolute minimum point)}} 
+    \begin{itemize}
+        \item คือ จุด $(k,f(k))$ ซึ่ง $f(x)\geq f(k)$ สำหรับทุก $x\in D_f$
+        \item \textcolor{orange}{เป็นจุดที่ต่ำที่สุดเทียบกับทั้งโดเมน}
+    \end{itemize}
+    \item \textbf{\emph{จุดสูงสุดสัมบูรณ์ (absolute maximum point)}} 
+    \begin{itemize}
+        \item คือ จุด $(k,f(k))$ ซึ่ง $f(x)\leq f(k)$ สำหรับทุก $x\in D_f$
+        \item \textcolor{orange}{เป็นจุดที่สูงที่สุดเทียบกับทั้งโดเมน}
+    \end{itemize}
+\end{itemize}
+จากรูปที่ \ref{fig:3order} จะเห็นว่า $f(a)$ และ $f(d)$ เป็นค่าต่ำสุดสัมพัทธ์ โดยที่ $f(a)$ เป็นค่าต่ำสุดสัมบูรณ์ด้วย ในขณะที่ $f(b)$ และ $f(c)$ เป็นค่าสูงสุดสัมพัทธ์ โดยที่ $f(b)$ เป็นค่าสูงสุดสัมบูรณ์ด้วย
+
+จากรูปที่ \ref{fig:5order} จะเห็นว่า $g(a),\s g(d)$ และ $g(f)$ เป็นค่าต่ำสุดสัมพัทธ์ โดยที่ $g(d)$ เป็นค่าต่ำสุดสัมบูรณ์ด้วย ในขณะที่ $g(b),\s g(c)$ และ $g(e)$ เป็นค่าสูงสุดสัมพัทธ์ โดยที่ $g(c)$ เป็นค่าสูงสุดสัมบูรณ์ด้วย
+
+หลังจากที่เราได้ทำความเข้าใจว่าค่าสูงสุด/ต่ำสุดสัมพัทธ์คืออะไรแล้ว ในส่วนถัดไปจะพิจารณาคุณสมบัติของจุดสุดขีดสัมพัทธ์ โดยพิจารณารูปด้านล่าง
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={-1,7/3},
+            xticklabels={$c$,$d$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-4,xmax=6,ymin=-1,ymax=8,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:3.8,5.5) {\scalebox{0.8}{$y=f(x)$}};
+            \node[] at (axis cs:-1.2,4.5) {\scalebox{0.8}{$f'(c)=0$}};
+            \node[] at (axis cs: 4.8,0.8) {\scalebox{0.8}{$f'(d)=0$}};
+            %\draw[green!60!black,stealth-stealth] (axis cs:-1.36285,-0.6) -- (axis cs:0.40684,-0.6); 
+            %\draw[gray,dashed] (axis cs:-3.6,0) -- (axis cs:-3.6,0.62);
+            \draw[gray,dashed] (axis cs:-1,0) -- (axis cs:-1,4);
+            \draw[gray,dashed] (axis cs:7/3,0) -- (axis cs:7/3,2/3);
+            %\draw[gray,dashed] (axis cs:16/3,0) -- (axis cs:16/3,90/12);
+            \addplot[blue,thick,domain=-4:1,samples=500]{-0.5*(x+1)^2+4};
+            \addplot[blue,thick,domain=1:6,samples=500]{0.75*(x-7/3)^2+2/3};
+            \addplot[green!60!black,very thick,domain=-2.2:0.2] {4};
+            \addplot[green!60!black,very thick,domain=17/15:53/15] {2/3};
+            %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+            %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+จะเห็นว่ารูปข้างต้นเป็นกรณีเดียวกับรูปที่ \ref{fig:3order} ซึ่งทราบมาแล้วว่า $(c,f(c))$ และ $(d,f(d))$ เป็นจุดสูงสุดและต่ำสุดสัมพัทธ์ตามลำดับ สิ่งที่เห็นได้ชัดคือที่จุดดังกล่าว ความชันเส้นสัมผัสเป็นศูนย์ จึงได้ข้อสรุปหนึ่งดังนี้
+\begin{center}
+    \begin{tcolorbox}[width=15cm,title=\textbf{ทฤษฎีบท: เงื่อนไขจำเป็นของอนุพันธ์อันดับ 1}]
+        สำหรับฟังก์ชัน $f$ ใด ๆ ที่นิยามบนช่วงเปิด $(a,b)$ และ $c\in(a,b)$ โดยที่ $f(c)$ เป็นค่าสุดขีดสัมพัทธ์และ $f'(c)$ มีค่าแล้ว $f'(c)=0$ 
+    \end{tcolorbox}
+\end{center}
+อย่างไรก็ตาม บทกลับของทฤษฎีบทข้างต้นไม่เป็นจริง กล่าวคือ ถึงแม้ว่า $f'(c)=0$ แต่ $f(c)$ อาจไม่เป็นทั้งค่าสูงสุดและค่าต่ำสุดสัมพัทธ์ แสดงดังรูปที่ \ref{fig:1ordernessex}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={7/3},
+            xticklabels={$c$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-0.5,xmax=6,ymin=-1,ymax=6,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:5,4.5) {\scalebox{0.8}{$y=f(x)$}};
+            %\node[] at (axis cs:-1.2,4.5) {\scalebox{0.8}{$f'(c)=0$}};
+            \node[] at (axis cs: 3.2,2.5) {\scalebox{0.8}{$f'(d)=0$}};
+            \draw[gray,dashed] (axis cs:-1,0) -- (axis cs:-1,4);
+            \draw[gray,dashed] (axis cs:7/3,0) -- (axis cs:7/3,3);
+            %\draw[gray,dashed] (axis cs:16/3,0) -- (axis cs:16/3,90/12);
+            \addplot[blue,thick,domain=-4:6,samples=500]{0.5*(x-7/3)^3+3};
+            \addplot[green!60!black,very thick,domain=17/15:53/15] {3};
+            %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+            %\addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.3:1.2}];
+        \end{axis}
+    \end{tikzpicture}
+    \caption{}
+    \label{fig:1ordernessex}
+\end{figure}
+ต่อไปจะขอนิยามคำศัพท์เพิ่มเติมหนึ่งคำ คือ
+\begin{tcolorbox}[title=\textbf{บทนิยาม: ค่าวิกฤต}]
+    สำหรับฟังก์ชัน $f$ ใด ๆ ที่นิยามบนช่วงเปิด $(a,b)$ และ $c\in(a,b)$ ซึ่งทำให้ $f'(c)=0$ หรือ $f'(c)$ ไม่มีค่า แล้วเราจะเรียก $c$ ว่า \emph{ค่าวิกฤต (critical value)} และเรียกจุด $(c,f(c))$ ว่า \emph{จุดวิกฤต (critical point)} 
+\end{tcolorbox}
+\newpage
+จากที่ได้กล่าวไปแล้วก่อนหน้านี้ จะเห็นว่า จุดวิกฤตนั้นจะเป็นจุดสุดขีดสัมพัทธ์หรือไม่ก็ได้ ต่อไปจะกล่าวถึงเงื่อนไขที่ทำให้สามารถสรุปได้ว่า จุดวิกฤตเป็นจุดสูงสุดหรือต่ำสุดสัมพัทธ์
+\begin{tcolorbox}[title=\textbf{เงื่อนไขเพียงพอสำหรับอนุพันธ์อันดับ 1}]
+    สำหรับฟังก์ชัน $f$ ใด ๆ ที่นิยามบนช่วงเปิด $(a,b)$ และ $c\in(a,b)$ เป็นค่าวิกฤตของ $f$ 
+    \begin{itemize}
+        \renewcommand{\labelitemi}{$*$}
+        \item ถ้า $f'(x)$ เปลี่ยนจากจำนวนจริงลบเป็นจำนวนจริงบวก เมื่อ $x$ เพิ่มขึ้นรอบ ๆ $c$ แล้ว $f(c)$ เป็นค่าต่ำสุดสัมพัทธ์ของ $f$
+        \item ถ้า $f'(x)$ เปลี่ยนจากจำนวนจริงบวกเป็นจำนวนจริงลบ เมื่อ $x$ เพิ่มขึ้นรอบ ๆ $c$ แล้ว $f(c)$ เป็นค่าสูงสุดสัมพัทธ์ของ $f$
+    \end{itemize}
+\end{tcolorbox}
+\vspace{2mm}
+\underline{ตัวอย่าง 13} จงหาจุดสูงสุด/ต่ำสุดสัมพัทธ์ของ $f(x)=x^3+5x^2-8x+12$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}เนื่องจาก $f'(x)=3x^2+10x-8=(3x-2)(x+4)$ 
+
+\hspace{15mm} จะได้ว่า $f'(x)=0$ \s เมื่อ $x=-4,\s \dfrac{2}{3}$ \s นั่นคือ \s $-4$ \s และ \s $\dfrac{2}{3}$ \s เป็นค่าวิกฤตของ $f$
+
+\hspace{15mm} ต่อไปจะแสดงเครื่องหมายของค่าของ $f'(x)$ ที่ค่า $x$ ต่าง ๆ บนเส้นจำนวน
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},
+            height = 20mm,
+            width=10cm,
+            xtick={-4,2/3},
+            xticklabels={$-4$,$\dfrac{2}{3}$},
+            xmin=-6,xmax=3,ymin=0,ymax=1.5,
+            every axis plot/.append style={very thick},
+            axis y line=none,
+            axis x line=middle,
+            axis line style={stealth-stealth},
+            %width=\axisdefaultwidth,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            ]
+            \node[] at (axis cs:-5,0.8) {\color{orange}{$+$}};
+            \node[] at (axis cs:-5/3,0.8) {\color{orange}{$-$}};
+            \node[] at (axis cs:11/6,0.8) {\color{orange}{$+$}};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+\hspace{15mm} และจาก $f(-4)=60,\hspace{0.5mm} f\left(\dfrac{2}{3}\right)=\dfrac{248}{27}$
+
+\hspace{15mm} ดังนั้น \s $(-4,60)$ เป็นจุดสูงสุดสัมพัทธ์ และ $\left(\dfrac{2}{3},\dfrac{248}{27}\right)$ เป็นจุดต่ำสุดสัมพัทธ์ \hfill \qed
+
+\vspace{3mm}
+นอกจากการใช้อนุพันธ์อันดับ 1 ในการตรวจสอบว่าที่ค่าวิกฤตใด ให้ค่าสูงสุดหรือค่าต่ำสุดสัมพัทธ์ \s สามารถใช้อนุพันธ์อันดับ 2 ได้เช่นกัน ซึ่งกล่าวว่า
+\begin{tcolorbox}%[title=\textbf{}]
+    สำหรับฟังก์ชัน $f$ ใด ๆ ที่นิยามบนช่วงเปิด $(a,b)$ และ $c\in(a,b)$ เป็นค่าวิกฤตของ $f$ ซึ่ง $f'(c)=0$ และ $f''(c)$ มีค่า
+    \begin{itemize}
+        \renewcommand{\labelitemi}{$*$}
+        \item ถ้า $f''(c)>0$ แล้ว $f(c)$ เป็นค่าต่ำสุดสัมพัทธ์ของ $f$
+        \item ถ้า $f''(c)<0$ แล้ว $f(c)$ เป็นค่าสูงสุดสัมพัทธ์ของ $f$
+    \end{itemize}
+\end{tcolorbox}
+\vspace{1mm}
+\begin{tcolorbox}[colback=red!10,colframe=red!90!blue,title=\textbf{สรุปการหาค่าสูงสุด/ต่ำสุดสัมพัทธ์}]
+    ให้ $f$ เป็นฟังก์ชันต่อเนื่องและหาอนุพันธ์ได้บน $(a,b)$ 
+    \begin{enumerate}
+        \item หาค่าวิกฤตทั้งหมดในช่วง $(a,b)$
+        \item ตรวจสอบค่าวิกฤตที่ได้จากข้อ 1 ว่าให้ค่าสูงสุดหรือค่าต่ำสุดสัมพัทธ์ด้วยอนุพันธ์อันดับ 1 หรืออนุพันธ์อันดับ 2
+        \item ค่าสูงสุด/ต่ำสุดสัมพัทธ์คือค่าของฟังก์ชัน
+    \end{enumerate}
+\end{tcolorbox}
+\begin{tcolorbox}[colback=red!10,colframe=red!90!blue,title=\textbf{สรุปการหาค่าสูงสุด/ต่ำสุดสัมบูรณ์}]
+    ให้ $f$ เป็นฟังก์ชันต่อเนื่องบนช่วงปิด $[a,b]$ และหาอนุพันธ์ได้บน $(a,b)$ 
+    \begin{enumerate}
+        \item หาค่าวิกฤตทั้งหมดในช่วง $(a,b)$
+        \item หาค่าของฟังก์ชัน ณ ค่าวิกฤตจากข้อ 1 และหาค่าของฟังก์ชันที่ขอบ $\left(f(a) \s \text{และ} \s f(b)\right)$
+        \item เปรียบเทียบค่าทั้งหมดที่ได้จากข้อ 2: ค่าใดสูงสุดถือเป็นค่าสูงสุดสัมบูรณ์ และ ค่าใดต่ำสุดถือเป็นค่าต่ำสุดสัมบูรณ์ของ $f$
+    \end{enumerate}
+\end{tcolorbox}
+
+\subsubsection{โจทย์ปัญหาเกี่ยวกับค่าสูงสุดและค่าต่ำสุด}
+ปัญหาในชีวิตประจำวันหลากหลายปัญหามีความจำเป็นต้องการให้ได้ค่าที่ดีที่สุด เช่น ต้องการให้การผลิตของอย่างหนึ่งใช้ต้นทุนที่ต่ำที่สุด หรือ ต้องการขายของชนิดหนึ่งเพื่อให้ได้กำไรสูงสุด เป็นต้น ปัญหาเหล่านี้หากเราสามารถกำหนดขึ้นเป็นฟังก์ชันที่ขึ้นกับปัจจัยต่าง ๆ ได้ ก็สามารถที่จะใช้ความรู้อนุพันธ์ในการหาค่าสูงสุดและค่าต่ำสุดได้ ในที่นี้จะขอสรุปแนวทางการกำหนดปัญหาดังนี้
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\Roman{enumi}.}
+    \item กำหนดฟังก์ชันแทนปริมาณที่ต้องการหาค่าสูงสุด/ค่าต่ำสุด
+    \item เขียนฟังก์ชันที่กำหนดในรูปของปริมาณหรือตัวแปรที่เกี่ยวข้อง หากมีมากกว่า 1 ตัวแปรให้หาความสัมพันธ์ระหว่างตัวแปรเพื่อให้สามารถเขียนฟังก์ชันในรูปของตัวแปรเดียวได้
+    \item ใช้ความรู้เรื่องค่าสูงสุด/ค่าต่ำสุดที่ศึกษามาก่อนหน้านี้เพื่อหาคำตอบ
+\end{enumerate}
+
+\vspace{2mm}
+\underline{ตัวอย่าง 14} ต้องการสร้างถังเก็บน้ำทรงกระบอกที่มีฝาปิดใบหนึ่ง ซึ่งจุน้ำได้ $16\pi$ ลูกบาศก์เมตร จงหารัศมีและความสูงของถังใบนี้ ที่ทำให้พื้นที่ผิวทั้งหมดของถังใบนี้น้อยที่สุด พร้อมทั้งหาค่าพื้นที่ผิวที่น้อยที่สุดด้วย\\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}กำหนดให้ $A$ แทนพื้นที่ของทรงกระบอก (ตารางเมตร)
+
+\hspace{31mm} $r$ แทนรัศมีของฐานทรงกระบอก (เมตร)
+
+\hspace{31mm} $h$ แทนความสูงของทรงกระบอก (เมตร)
+
+\hspace{15mm} จะได้ว่า \s $A=2\pi rh+2\pi r^2$
+
+\hspace{15mm} และจากปริมาตรถังเท่ากับ $16\pi$ ลูกบาศก์เมตร นั่นคือ \s $16\pi=\pi r^2h \hspace{1mm} \rightarrow \hspace{1mm} h=\dfrac{16}{r^2}$ \s แทนใน $A$ จะได้
+
+\hspace{15mm} $A(r)=2\pi r \left(\dfrac{16}{r^2}\right)+2\pi r^2 = \dfrac{32\pi}{r}+2\pi r^2$ \s เมื่อ \s $r>0$
+
+\hspace{15mm} ดังนั้น \s $A'(r)=-\dfrac{32\pi}{r^2}+4\pi r = \dfrac{4\pi(r^3-8)}{r^2}$
+
+\hspace{15mm} ถ้า $A'(r)=0$ \s แล้วจะได้ \s $\dfrac{4\pi(r^3-8)}{r^2}=0 \hspace{2mm} \rightarrow \hspace{2mm} r=2$ เป็นค่าวิกฤตของ $A$
+\begin{comment}
+\hspace{15mm} เส้นจำนวนแสดงเครื่องหมายของ $A'(r)$ เป็นดังนี้
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},
+            height = 20mm,
+            width=7cm,
+            xtick={2},
+            %xticklabels={$-4$,$\dfrac{2}{3}$},
+            xmin=0,xmax=4,ymin=0,ymax=1.5,
+            every axis plot/.append style={very thick},
+            axis y line=none,
+            axis x line=middle,
+            axis line style={stealth-stealth},
+            %width=\axisdefaultwidth,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            ]
+            \node[] at (axis cs:1,0.8) {\color{orange}{$-$}};
+            \node[] at (axis cs:3,0.8) {\color{orange}{$+$}};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+\end{comment}
+
+\hspace{15mm} เนื่องจาก \s $A''(r)=\dfrac{64\pi}{r^3}+4\pi \hspace{2mm} \rightarrow \hspace{2mm} A''(2)=12\pi>0$
+
+\hspace{15mm} เพราะฉะนั้น $A$ มีค่าต่ำสุดสัมพัทธ์ที่ $r=2  \hspace{2mm} \rightarrow \hspace{2mm} h=4$
+
+\hspace{15mm} ทรงกระบอกใบนี้ต้องมีรัศมีฐานยาว $2$ เมตร และมีความสูง $4$ เมตร จึงจะทำให้พื้นที่ผิวทั้งหมดเท่ากับ 
+
+\hspace{15mm} $\dfrac{32\pi}{2}+2\pi\cdot2^2=24\pi$ ตารางเมตร ซึ่งเป็นค่าที่น้อยที่สุด \hfill\qed
+\newpage
+\underline{\large แบบฝึกหัด 7} 
+\begin{enumerate}
+    \item จงหาสูงสุดและค่าต่ำสุดสัมพัทธ์ และค่าสูงสุดและค่าต่ำสุดสัมบูรณ์ (ถ้าหาได้) ของฟังก์ชันในข้อต่อไปนี้
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $f(x)=x^3-2x^2-4x+8$ \s บนช่วง \s $[-2,3]$
+        \vspace{50mm}
+        \item $f(x)=-x^4+\dfrac{1}{3}x^3+13x^2+21x-100$ \s บนช่วง \s $[-1,4]$
+        \vspace{50mm}
+        \item $f(x)=(3x+2)^2(2x-3)^2$
+        \vspace{50mm}
+        \item $f(x)=4x^5-15x^4+40x^2-30$ \s บนช่วง \s $[-2,3]$
+    \end{enumerate}
+    \newpage
+    \item กำหนดให้ $f$ เป็นฟังก์ชันพหุนามดีกรี $3$ ที่มีค่าต่ำสุดสัมพัทธ์และค่าสูงสุดสัมพัทธ์ที่ตำแหน่ง $x=-\dfrac{3}{2}$ และ $x=\dfrac{5}{6}$ ตามลำดับ \s มีอัตราการเปลี่ยนแปลงของความชันเส้นโค้ง $f$ ขณะที่ $x=-0.5$ เป็น $4$ \s และ $y=f(x)$ ตัดแกน $x$ ที่ $x=1$ \s \s จงหาจุดตัดแกน $x$ ที่เหลือของ $y=f(x)$ 
+    \vspace{80mm}
+    \item ผู้ชายคนหนึ่งต้องการสร้างกล่องทรงสี่เหลี่ยมมุมฉากจากกระดาษลังที่กว้าง 20 เซนติเมตร และยาว 50 เซนติเมตร โดยเขาจะตัดมุมทั้งสี่เป็นรูปสี่เหลี่ยมจัตุรัสออกแล้วจึงพับเป็นกล่อง จงหาว่ากล่องใบนี้มีความสูงเท่าใดจึงจะทำให้มีปริมาตรมากที่สุด
+    \begin{center}
+        \begin{tikzpicture}
+            \draw[] (0,0) rectangle (5,2);
+            \draw[gray] (0.3,0.3) rectangle (4.7,1.7); 
+            \draw[stealth-stealth] (0,2.2) -- (5,2.2);
+            \draw[stealth-stealth] (5.2,0) -- (5.2,2);
+            \draw[] (0,2.05) -- (0,2.3);
+            \draw[] (5,2.05) -- (5,2.3);
+            \draw[] (5.05,0) -- (5.3,0);
+            \draw[] (5.05,2) -- (5.3,2);
+            \node[] at (2.5,2.5) {$50$ \textsf{cm}};
+            \node[] at (5.8,1) {$20$ \textsf{cm}};
+            \draw[dashed] (0,1.7) -- (0.3,1.7) -- (0.3,2);
+            \draw[dashed] (0,0.3) -- (0.3,0.3) -- (0.3,0);
+            \draw[dashed] (5,1.7) -- (4.7,1.7) -- (4.7,2);
+            \draw[dashed] (4.7,0) -- (4.7,0.3) -- (5,0.3);
+        \end{tikzpicture}
+    \end{center}
+\end{enumerate}
+
+\newpage
+\section{อินทิกรัลของฟังก์ชัน}
+\subsection{ปฏิยานุพันธ์ของฟังก์ชัน}
+ในหัวข้อก่อนหน้านี้เราได้ศึกษาเกี่ยวกับการหาอนุพันธ์และการนำไปประยุกต์ใช้ สำหรับหัวข้อนี้จะศึกษากระบวนการที่กลับกัน นั่นคือ การหา\emph{ปฏิยานุพันธ์ (antiderivative)} ของฟังก์ชัน กล่าวคือ เมื่อทราบ $f$ แล้วจะหา $F$ ที่ทำให้ $F'(x)=f(x)$  เช่น $F(x)=-x^4+5x-3$ เป็นปฏิยานุพันธ์ของ $f(x)=-4x^3+5$ \s เป็นต้น หากสังเกตเพิ่มเติมจะพบว่าปฏิยานุพันธ์ของฟังก์ชันหนึ่ง ๆ ไม่ได้มีเพียงฟังก์ชันเดียว เพราะจะเห็นว่าเทอมที่เป็นค่าคงที่ใน $F$ เมื่อหาอนุพันธ์แล้วจะได้ $0$ เพราะฉะนั้นสำหรับตัวอย่างข้างต้น ปฎิยานุพันธ์ของ $f$ จะมีรูปทั่วไปคือ\s $F(x)=-x^4+5x+c$ เมื่อ $c$ เป็นค่าคงที่ใด ๆ นั่นเอง
+\subsection{ปริพันธ์ไม่จำกัดเขต}
+ปริพันธ์หรืออินทิกรัลไม่จำกัดเขต (indefinite integral) ของฟังก์ชัน $f$ เขียนแทนด้วย $\int f(x) dx$  ซึ่งมีค่าเท่ากับรูปทั่วไปของปฏิยานุพันธ์ของ $f$ นั่นเอง กล่าวคือ 
+\begin{align*}
+    \text{ถ้า}\hspace{10mm} F'(x) &= f(x) \\
+    \text{แล้ว} \int f(x)dx &= F(x)+c
+\end{align*}
+เนื่องจากกระบวนการหาปฏิยานุพันธ์เป็นกระบวนการย้อนกลับของการหาอนุพันธ์ ดังนั้นสูตรการหาปริพันธ์ไม่จำกัดเขตที่จะกล่าวถึงต่อไปนี้ มีที่มาจากกระบวนการย้อนกลับของอนุพันธ์บางสูตรที่เคยกล่าวถึง
+
+\begin{tcolorbox}[sharp corners, colback=green!30, colframe=green!80!blue]
+    กำหนดให้ $f$ และ $g$ เป็นฟังก์ชันที่หาปริพันธ์ได้, $n\in\mathbb{R}$ และ $k,\ c$ เป็นค่าคงที่
+    
+    \vspace{1.5mm}
+    %\begin{minipage}{0.35\textwidth}
+    \begin{enumerate}
+        \item $\displaystyle\int k \,dx=kx+c$ 
+        \item $\displaystyle\int x^n \,dx=\dfrac{x^{n+1}}{n+1}+c$ \s\s\s เมื่อ $n\neq-1$
+        \item $y=\displaystyle\int kf(x)\,dx=k\displaystyle\int f(x)\,dx$
+        \item $y=\displaystyle\int \left(f(x)\pm g(x)\right)\,dx=\displaystyle\int f(x)\,dx \pm \displaystyle\int g(x)\,dx$
+    \end{enumerate}
+    %\end{minipage}
+\end{tcolorbox}
+
+\underline{ตัวอย่าง 15} จงหา $F$ ซึ่งเป็นปฏิยานุพันธ์ของ $f(x)=x+\dfrac{2}{\sqrt{x}}-3$ โดยที่ $F(4)=0$ \\[1ex]
+\underline{\underline{วฺิธีทำ}}\hspace{8mm} จากโจทย์จะได้ว่า 
+%\begin{center}
+%\resizebox{15cm}{!}{
+%\begin{minipage}{\textwidth}
+%\begin{align*}
+%    F(x)=\int f(x)\,dx & = \int \left(x+\frac{2}{\sqrt{x}}-3\right)\,dx \\
+%    & = \int x\,dx+\int \frac{2}{\sqrt{x}}\,dx - \int 3\,dx \\
+%    & = \frac{x^2}{2} + \frac{2x^{\frac{1}{2}}}{\frac{1}{2}} - 3x +c \\
+%    & = \frac{x^2}{2} + 4\sqrt{x} -3x+c
+%\end{align*}
+%\end{minipage}}
+%\end{center}
+\begin{align*}
+    F(x)=\int f(x)\,dx = \int \left(x+\frac{2}{\sqrt{x}}-3\right)\,dx & = \int x\,dx+\int \frac{2}{\sqrt{x}}\,dx - \int 3\,dx \\
+    %& = \frac{x^2}{2} + \frac{2x^{\frac{1}{2}}}{\frac{1}{2}} - 3x +c \\
+    & = \frac{x^2}{2} + 4\sqrt{x} -3x+c
+\end{align*}
+\hspace{15mm} เนื่องจาก $F(4)=0$ จะได้ว่า $c=-4$
+
+\hspace{15mm} ดังนั้น ปฏิยานุพันธ์ของ $f$ ดังกล่าวคือ \s $F(x)=\dfrac{x^2}{2}+4\sqrt{x}-3x-4$ \hfill \qed
+
+\underline{\large แบบฝึกหัด 8}
+\begin{enumerate}
+    \item จงหาปริพันธ์ไม่จำกัดเขตต่อไปนี้
+    \begin{multicols}{2}
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item $\displaystyle \int \left(x^3-5x^2+2x+3-\dfrac{1}{x^2}\right)\,dx$
+        \vspace{65mm}
+        \item $\displaystyle\int (x-1)^5\,dx$
+        \vspace{65mm}
+        \item $\displaystyle\int \dfrac{3x^4+x^3-\nr{3}{x}-2}{x\nr{5}{x^2}}\,dx$
+        \item $\displaystyle\int \dfrac{2x+3\sqrt{x}-35}{\sqrt{x}+5}\,dx$
+        \vspace{65mm}
+        \item $\displaystyle\int \dfrac{x^3-x^2+x+3}{1+\nr{3}{x}}\,dx$
+        \vspace{65mm}
+        \item $\displaystyle\int \dfrac{2x^4-5x^3+5x^2-5x+3}{x^{\frac{13}{6}}+x^{\frac{1}{6}}}\,dx$
+    \end{enumerate}
+    \end{multicols}
+    \newpage
+    \item กำหนดให้ $f$ เป็นฟังก์ชันซึ่ง \s $f''(x)=ax+\dfrac{b}{x^3}$ \s โดยค่าต่ำสุดสัมพัทธ์ของ $f$ เท่ากับ $10.5$ ที่ $x=-1.5$ \s และ ค่าสูงสุดสัมพัทธ์ของ $f$ เท่ากับ $-4.5$ ที่ $x=1.5$ \s และ $f'(1)=7.5$ \s\s จงหา $f(x)$
+    \vspace{90mm}
+    \item ถังน้ำใบหนึ่งมีน้ำอยู่เต็มถัง ถูกเครื่องสูบน้ำเครื่องหนึ่ง สูบน้ำออกด้วยอัตราการไหลที่เวลา $t$ วินาทีเป็น $5+t^2$ ลูกบาศก์เมตรต่อวินาที ถังใบนี้จะถูกสูบน้ำออกจนหมดในเวลา $15$ วินาที จงหาว่าถ้าใช้เครื่องสูบน้ำเครื่องเดิม จะสูบน้ำออกจากถังได้หมดในเวลากี่วินาทีหากปริมาตรน้ำในถังตอนเริ่มต้นเป็น $53\%$ ของปริมาตรน้ำเต็มถัง
+\end{enumerate}
+\newpage
+\subsection{ปริพันธ์จำกัดเขต}
+อินทิกรัลหรือปริพันธ์จำกัดเขต (definite integral) ของฟังก์ชัน $f$ บนช่วงปิด $[a,b]$ มีสัญลักษณฺ์เป็น 
+$\displaystyle\int\limits_a^b f(x)\,dx$
+ซึ่งจะเป็นค่าคงที่ซึ่งไม่ขึ้นกับตัวแปร $x$ \s โดยมีค่าเกี่ยวข้องกับพื้นที่ระหว่างเส้นโค้ง $f$ และแกน $x$
+
+พิจารณาการหาพื้นที่ปิดล้อมระหว่างเส้นโค้ง $y=f(x)$ กับแกน $x$ จาก $x=a$ ถึง $x=b$ ดังรูปที่ \ref{fig:defint} \\
+เราจะเริ่มการหาพื้นที่โดยการประมาณด้วยพื้นที่สี่เหลี่ยมย่อยออกเป็น $n$ ส่วนที่เท่า ๆ กัน 
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={1,3},
+            xticklabels={$a$,$b$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-0.5,xmax=4,ymin=-1,ymax=5,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:5,4.5) {\scalebox{0.8}{$y=f(x)$}};
+            \addplot[blue,thick,domain=0:4,samples=500]{0.05*(x+5/3)*(x+1)*(2*x-3)*(x-4)+3};
+            \addplot[draw=none,name path=B] {0.01};
+            %\foreach \i in {1,...,8}{
+            %    \addplot[black,thick,domain=0.75+0.25*\i:1+0.25*\i,samples=50,name path=A]{0.05*(1+0.25*\i+5/3)*(1+0.25*\i+1)*(2*(1+0.25*\i)-3)*(1+0.25*\i-4)+3};
+            %    \addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.75+0.25*\i:1+0.25*\i}];}
+            \draw[black] (axis cs:1,0) -- (axis cs:1,{0.05*(1.5+5/3)*(1.5+1)*(2*1.5-3)*(1.5-4)+3});
+            \pgfplotsinvokeforeach{1,...,4}{
+                \addplot[draw=none,domain=0.5+0.5*#1:1+0.5*#1,samples=50,name path=A]{0.05*(1+0.5*#1+5/3)*(1+0.5*#1+1)*(2*(1+0.5*#1)-3)*(1+0.5*#1-4)+3};
+                \addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.5+0.5*#1:1+0.5*#1}];
+                \draw[black] (axis cs:0.5+0.5*#1,{0.05*(1+0.5*#1+5/3)*(1+0.5*#1+1)*(2*(1+0.5*#1)-3)*(1+0.5*#1-4)+3}) -- (axis cs:1+0.5*#1,{0.05*(1+0.5*#1+5/3)*(1+0.5*#1+1)*(2*(1+0.5*#1)-3)*(1+0.5*#1-4)+3});
+                \draw[black] (axis cs:1+0.5*#1,0) -- (axis cs:1+0.5*#1,{0.05*(1+0.5*#1+5/3)*(1+0.5*#1+1)*(2*(1+0.5*#1)-3)*(1+0.5*#1-4)+3});
+                }
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$n=4$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[h]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={1,3},
+            xticklabels={$a$,$b$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-0.5,xmax=4,ymin=-1,ymax=5,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:5,4.5) {\scalebox{0.8}{$y=f(x)$}};
+            \addplot[blue,thick,domain=0:4,samples=500]{0.05*(x+5/3)*(x+1)*(2*x-3)*(x-4)+3};
+            \addplot[draw=none,name path=B] {0.01};
+            %\foreach \i in {1,...,8}{
+            %    \addplot[black,thick,domain=0.75+0.25*\i:1+0.25*\i,samples=50,name path=A]{0.05*(1+0.25*\i+5/3)*(1+0.25*\i+1)*(2*(1+0.25*\i)-3)*(1+0.25*\i-4)+3};
+            %    \addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.75+0.25*\i:1+0.25*\i}];}
+            \draw[black] (axis cs:1,0) -- (axis cs:1,{0.05*(1.25+5/3)*(1.25+1)*(2*1.25-3)*(1.25-4)+3});
+            \pgfplotsinvokeforeach{1,...,8}{
+                \addplot[draw=none,domain=0.75+0.25*#1:1+0.25*#1,samples=50,name path=A]{0.05*(1+0.25*#1+5/3)*(1+0.25*#1+1)*(2*(1+0.25*#1)-3)*(1+0.25*#1-4)+3};
+                \addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.75+0.25*#1:1+0.25*#1}];
+                \draw[black] (axis cs:0.75+0.25*#1,{0.05*(1+0.25*#1+5/3)*(1+0.25*#1+1)*(2*(1+0.25*#1)-3)*(1+0.25*#1-4)+3}) -- (axis cs:1+0.25*#1,{0.05*(1+0.25*#1+5/3)*(1+0.25*#1+1)*(2*(1+0.25*#1)-3)*(1+0.25*#1-4)+3});
+                \draw[black] (axis cs:1+0.25*#1,0) -- (axis cs:1+0.25*#1,{0.05*(1+0.25*#1+5/3)*(1+0.25*#1+1)*(2*(1+0.25*#1)-3)*(1+0.25*#1-4)+3});
+                }
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$n=8$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[h]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={1,3},
+            xticklabels={$a$,$b$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-0.5,xmax=4,ymin=-1,ymax=5,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:5,4.5) {\scalebox{0.8}{$y=f(x)$}};
+            \addplot[blue,thick,domain=0:4,samples=500]{0.05*(x+5/3)*(x+1)*(2*x-3)*(x-4)+3};
+            \addplot[draw=none,name path=B] {0.01};
+            %\foreach \i in {1,...,8}{
+            %    \addplot[black,thick,domain=0.75+0.25*\i:1+0.25*\i,samples=50,name path=A]{0.05*(1+0.25*\i+5/3)*(1+0.25*\i+1)*(2*(1+0.25*\i)-3)*(1+0.25*\i-4)+3};
+            %    \addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.75+0.25*\i:1+0.25*\i}];}
+            \draw[black] (axis cs:1,0) -- (axis cs:1,{0.05*(1.125+5/3)*(1.125+1)*(2*1.125-3)*(1.125-4)+3});
+            \pgfplotsinvokeforeach{1,...,16}{
+                \addplot[draw=none,domain=0.875+0.125*#1:1+0.125*#1,samples=50,name path=A]{0.05*(1+0.125*#1+5/3)*(1+0.125*#1+1)*(2*(1+0.125*#1)-3)*(1+0.125*#1-4)+3};
+                \addplot[green!40!white] fill between [of=A and B,soft clip={domain=0.875+0.125*#1:1+0.125*#1}];
+                \draw[black] (axis cs:0.875+0.125*#1,{0.05*(1+0.125*#1+5/3)*(1+0.125*#1+1)*(2*(1+0.125*#1)-3)*(1+0.125*#1-4)+3}) -- (axis cs:1+0.125*#1,{0.05*(1+0.125*#1+5/3)*(1+0.125*#1+1)*(2*(1+0.125*#1)-3)*(1+0.125*#1-4)+3});
+                \draw[black] (axis cs:1+0.125*#1,0) -- (axis cs:1+0.125*#1,{0.05*(1+0.125*#1+5/3)*(1+0.125*#1+1)*(2*(1+0.125*#1)-3)*(1+0.125*#1-4)+3});
+                }
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$n=32$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[h]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={$x$},ylabel={$y$},
+            unit vector ratio*=1 1 1,
+            %width=18cm,
+            %height=30cm,
+            xtick={1,3},
+            xticklabels={$a$,$b$},
+            ytick=\empty,
+            %yticklabels={$L$},
+            xmin=-0.5,xmax=4,ymin=-1,ymax=5,
+            every axis plot/.append style={very thick},
+            axis y line=middle,
+            axis x line=middle,
+            every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+            ]
+            \node[] at (axis cs:5,4.5) {\scalebox{0.8}{$y=f(x)$}};
+            %\draw[gray,dashed] (axis cs:-1,0) -- (axis cs:-1,4);
+            %\draw[gray,dashed] (axis cs:7/3,0) -- (axis cs:7/3,3);
+            %\draw[gray,dashed] (axis cs:16/3,0) -- (axis cs:16/3,90/12);
+            \addplot[blue,thick,domain=0:4,samples=500,name path=A]{0.05*(x+5/3)*(x+1)*(2*x-3)*(x-4)+3};
+            \addplot[draw=none,name path=B] {0.01};
+            %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+            \addplot[green!40!white] fill between [of=A and B,soft clip={domain=1:3}];
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$n\rightarrow \infty$}
+    \end{subfigure}
+    \caption{}
+    \label{fig:defint}
+\end{figure}
+
+จะเห็นว่าเมื่อแบ่งการคิดออกเป็นพื้นที่สี่เหลี่ยมย่อย ๆ ที่มากขึ้น พื้นที่สี่เหลี่ยมทั้งหมดจะมีความใกล้เคียงกับพื้นที่ใต้เส้นโค้งมากขึ้น โดยอาศัยความรู้เรื่องลิมิตจะได้ว่า
+\begin{equation}
+    \label{eqn:riemann}
+    \int\limits_a^b f(x)\,dx = \lim_{n\to \infty} \sum_{i=1}^n f(x_i) \Delta x
+\end{equation}
+เมื่อ $\Delta x = \dfrac{b-a}{n}$ \s และ \s $x_i=a+\dfrac{(b-a)i}{n}$ \\
+สมการ \eqref{eqn:riemann} คือนิยามของอินทิกรัลจำกัดเขตแบบผลบวกรีมันน์ (Riemann Sum)
+
+\underline{ตัวอย่าง 16} จงหาค่าของ \s $\displaystyle\int\limits_1^5 (x^2-2x+3)\,dx$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}เนื่องจากต้องการหาอินทิกรัลจำกัดเขตในช่วงปิด $[1,5]$ จะได้ \s $\Delta x=\dfrac{5-1}{n}=\dfrac{4}{n}$ และ $x_i=1+\dfrac{4i}{n}$
+
+\hspace{15mm} ต่อไปพิจารณา
+\begin{align*}
+    x_i^2-2x_i+3 & = \left(1+\frac{4i}{n}\right)^2-2\left(1+\frac{4i}{n}\right)+3 \\
+    & = \left(1+\frac{8i}{n}+\frac{16i^2}{n^2}\right)-\left(2+\frac{8i}{n}\right)+3 \\
+    & = 2+\frac{16}{n^2}i^2
+\end{align*}
+\hspace{15mm} จะได้ว่า
+\begin{align*}
+    \sum_{i=1}^n (x_i^2-2x_i+3) & = \sum_{i=1}^n \left(2+\frac{16}{n^2}i^2\right) \\
+    & = \sum_{i=1}^n 2 + \frac{16}{n^2}\sum_{i=1}^n i^2 \\
+    & = 2n+\frac{16}{n^2}\cdot \frac{n(n+1)(2n+1)}{6} \\
+    & = 2n+\frac{8}{3}(n+1)\left(2+\frac{1}{n}\right)
+\end{align*}
+\hspace{15mm} ดังนั้น 
+$\displaystyle\int\limits_1^5 (x^2-2x+3)\,dx = \displaystyle\lim_{n\to\infty} \sum_{i=1}^n (x_i^2-2x_i+3)\Delta x $
+
+\hspace{60mm}$= \displaystyle\lim_{n\to\infty} 8+\dfrac{32}{3}\left(1+\dfrac{1}{n}\right)\left(2+\dfrac{1}{n}\right) = \dfrac{88}{3}$ \hfill \qed
+
+\vspace{3mm}
+จากตัวอย่างที่ 16 จะเห็นว่าการหาอินทิกรัลจำกัดเขตโดยวิธีการดังกล่าวค่อนข้างยุ่งยากและจะมีความซับซ้อนมากขึ้นหากฟังก์ชันที่ต้องการอินทิเกรตมีความยาก ดังนั้นทฤษฎีบทที่จะกล่าวถึงในลำดับถัดไปจะทำให้สามารถหาค่าอินทิกรัลจำกัดเขตได้ง่ายขึ้นมาก ซึ่งสามารถพิสูจน์ได้โดยอาศัยความรู้อนุพันธ์
+\begin{tcolorbox}[title=\textbf{ทฤษฎีบทหลักมูลของแคลคูลัส (Fundamental Theorem of Calculus)}]
+    กำหนด $f$ เป็นฟังก์ชันต่อเนื่องบนช่วง $[a,b]$ \s ถ้า $F$ เป็นปฏิยานุพันธ์ของ $f$ แล้ว
+    \begin{equation*}
+        \int\limits_a^b f(x)\,dx = F(x)\Bigr|_a^b = F(b)-F(a)
+    \end{equation*}
+\end{tcolorbox}
+
+สมบัติที่ได้กล่าวไปบางส่วนในอินทิกรัลไม่จำกัดเขตก็สามารถนำมาใช้กับอินทิกรัลจำกัดเขตได้เช่นกัน โดยสำหรับอินทิกรัลจำกัดเขตจะมีสมบัติเพิ่มเติมที่สำคัญอีก 1 ข้อคือ \\
+ให้ $f$ เป็นฟังก์ชันต่อเนื่องและอินทิเกรตได้บนช่วง $[a,b]$ และ $c\in[a,b]$ แล้ว \s $\displaystyle\int\limits_a^b f(x)\,dx = \displaystyle\int\limits_a^c f(x)\,dx + \displaystyle\int\limits_c^b f(x)\,dx$
+\newpage
+\underline{ตัวอย่าง 17} จงหาค่าของ \s $\displaystyle\int\limits_1^5 (x^2-2x+3)\,dx$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}จาก \s $\displaystyle\int (x^2-2x+3)\,dx = \dfrac{1}{3}x^3-x^2+3x+c$
+
+\hspace{15mm} ดังนั้น 
+\begin{align*}
+    \int\limits_1^5 (x^2-2x+3)\,dx & = \left(\frac{1}{3}x^3-x^2+3x+c\right)\bigg|_1^5 \\ 
+    & = \left(\frac{5^3}{3}-5^2+15+c\right)-\left(\frac{1}{3}-1+3+c\right) \\
+    & = \frac{88}{3} \tag*\qed
+\end{align*}
+
+\vspace{3mm}
+\underline{ตัวอย่าง 18} จงหาค่าของ \s $\displaystyle\int\limits_0^8 (1-\sqrt{x})\,dx$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}โดยทฤษฎีบทหลักมูลของแคลคูลัส จะได้
+\begin{align*}
+    \int\limits_0^8 (1-\sqrt{x})\,dx & = \left(x-\frac{2}{3}x^{\scriptscriptstyle \frac{3}{2}}\right)\bigg|_0^8 \\
+    & = 8-\frac{2}{3}\cdot 8^{\scriptscriptstyle \frac{3}{2}} = \frac{24-32\sqrt{2}}{3} \tag*\qed
+\end{align*}
+
+\vspace{3mm}
+\subsection{การหาพื้นที่ที่ปิดล้อมด้วยเส้นโค้ง}
+จากตัวอย่างที่ 17 และ 18 \s จะเห็นว่าอินทิกรัลจำกัดเขตสามารถเป็นได้ทั้งค่าลบหรือค่าบวก แล้วค่าเหล่านี้จะเกี่ยวข้องกับพื้นที่ปิดล้อมด้วยเส้นโค้งอย่างไร
+ในส่วนนี้จะกล่าวถึงการหาพื้นที่ปิดล้อมระหว่างเส้นโค้ง $y=f(x)$ กับแกน $x$ \s จากสมการที่ \eqref{eqn:riemann} จะได้ว่า 
+\begin{itemize}
+    \item ถ้า $f(x)\geq0$ สำหรับทุก $x\in[a,b]$ แล้ว \s $\displaystyle\int\limits_a^b f(x)\,dx \geq0$
+    \item ถ้า $f(x)\leq0$ สำหรับทุก $x\in[a,b]$ แล้ว \s $\displaystyle\int\limits_a^b f(x)\,dx \leq0$
+\end{itemize}
+ดังนั้น ถ้าให้ $A$ แทนพื้นที่ปิดล้อมระหว่างเส้นโค้ง $y=f(x)$ กับแกน $x$ จาก $x=a$ ถึง $x=b$ จะมีค่าเป็น
+\begin{itemize}
+    \item $A=\displaystyle\int\limits_a^b f(x)\,dx$ \s เมื่อ \s $f(x)\geq0$
+    \item $A=-\displaystyle\int\limits_a^b f(x)\,dx$ \s เมื่อ \s $f(x)\leq0$
+\end{itemize}
+
+\underline{ตัวอย่าง 19} จงหาพื้นที่ที่ปิดล้อมด้วยเส้นโค้ง $y=x^2+2x-8$ กับแกน $x$ จาก $x=-\frac{1}{2}$ ถึง $x=3$ \\[1ex]
+\underline{\underline{วิธีทำ}}\hspace{8mm}พิจารณาหาช่วงที่เส้นโค้งอยู่เหนือหรือใต้แกน $x$ ดังนี้
+
+\hspace{15mm} เมื่อแก้อสมการ $x^2+2x-8\geq0$ จะได้คำตอบเป็น $x\leq-4,\s x\geq2$ และ
+
+\hspace{15mm} เมื่อแก้อสมการ $x^2+2x-8\leq0$ จะได้คำตอบเป็น $-4\leq x\leq2$
+
+\hspace{15mm} ดังนั้นพื้นที่ปิดล้อมจะมีค่าเท่ากับ
+\begin{align*}
+    A & = -\int\limits_{-\frac{1}{2}}^2 (x^2+2x-8)\,dx + \int\limits_2^3 (x^2+2x-8)\,dx \\
+    & = -\left(\frac{x^3}{3}+x^2-8x\right)\bigg|_{-\frac{1}{2}}^2 + \left(\frac{x^3}{3}+x^2-8x\right)\bigg|_2^3 \\
+    & = -\left(-\frac{325}{24}\right)+\frac{10}{3} = \frac{135}{8} \hspace{2mm} \text{ตารางหน่วย} \tag*\qed
+\end{align*}
+
+\vspace{3mm}
+\underline{\large แบบฝึกหัด 9}
+\begin{enumerate}
+    \item จงหาอินทิกรัลจำกัดเขตต่อไปนี้
+    \begin{multicols}{2}
+        \begin{enumerate}
+            \renewcommand{\labelenumii}{\arabic{enumii})}
+            \item $\displaystyle\int\limits_1^2 \dfrac{x^2+2}{x^2}\,dx$
+            \vspace{50mm}
+            \item $\displaystyle\int\limits_4^9 \dfrac{x-1}{x+\sqrt{x}}\,dx$
+            \item $\displaystyle\int\limits_1^3 \dfrac{(x+1)|1-x|+2\nr{5}{x}}{x^2}\,dx$
+            \vspace{50mm}
+            \item $\displaystyle\int\limits_{\scriptscriptstyle \frac{1}{4}}^4 \dfrac{2x^2-x-1}{1+\sqrt{x}}\,dx$
+        \end{enumerate}
+    \end{multicols}
+    \newpage
+    \item กำหนดกราฟของฟังก์ชัน $f$ ดังรูป 
+    
+    \begin{minipage}[t]{0.45\textwidth}
+        \vspace{0mm}
+        พิจารณาข้อความต่อไปนี้
+        \begin{enumerate}
+            \item $\displaystyle\int\limits_{-2}^{1.5} f(x)\,dx = 9$
+            \item $\displaystyle\int\limits_{0}^4 f(x)\,dx < -10$
+            \item $\displaystyle\int\limits_{4}^6 f(x)\,dx - \displaystyle\int\limits_{1.5}^4 f(x)\,dx = \displaystyle\int\limits_{1.5}^6 |f(x)|\,dx$
+            \item $\left|\displaystyle\int\limits_{3}^6 f(x)\,dx\right| \geq \displaystyle\int\limits_3^6 |f(x)|\,dx$
+        \end{enumerate}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \vspace{0mm}
+        \begin{tikzpicture}
+            \begin{axis}[xlabel={$x$},ylabel={$y$},
+                unit vector ratio*=1 1 1,
+                %width=18cm,
+                %height=30cm,
+                %xtick={$-4$,$-3$,$-2$,$-2$,$-1$,$1$,$2$,$3$,$4$,$5$,$6$,$7$,$8$},
+                xtick={-4,-3,-2,-1,1,2,3,4,5,6,7,8},
+                %xticklabels={$a$,$b$},
+                ytick=\empty,
+                %yticklabels={$L$},
+                xmin=-4.2,xmax=8.4,ymin=-5,ymax=4,
+                every axis plot/.append style={very thick},
+                axis y line=middle,
+                axis x line=middle,
+                every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+                every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+                every x tick label/.append style={font=\tiny, yshift=0.5ex},
+                ]
+                \node[] at (axis cs:7.3,3.5) {\scalebox{0.8}{$y=f(x)$}};
+                %\draw[gray,dashed] (axis cs:-1,0) -- (axis cs:-1,4);
+                %\draw[gray,dashed] (axis cs:7/3,0) -- (axis cs:7/3,3);
+                %\draw[gray,dashed] (axis cs:16/3,0) -- (axis cs:16/3,90/12);
+                \addplot[blue,thick,domain=-5:4,samples=500,name path=A1]{0.05*(x+2)*(x+1)*(2*x-3)*(x-4)};
+                \addplot[blue,thick,domain=4:8,samples=500,name path=A2]{2.5*sqrt(x-4)};
+                \addplot[draw=none,domain=-4:8,name path=B] {0.01};
+                \addplot[draw=none,domain=-4:8,name path=C] {-0.01};
+                %\draw [blue,fill=white] (axis cs: 3,5) circle (1.5pt);
+                \addplot[pink!40!white] fill between [of=A1 and C,soft clip={domain=-2:-1}];
+                %\addplot[pink!40!white] fill between [of=A1 and B,soft clip={domain=-1:1.5}];
+                \addplot[pink!40!white] fill between [of=A1 and B,soft clip={domain=-1:-0.01}];
+                \addplot[pink!40!white] fill between [of=A1 and B,soft clip={domain=0.01:1.5}];
+                \addplot[pink!40!white] fill between [of=A1 and C,soft clip={domain=1.5:4}];
+                \addplot[pink!40!white] fill between [of=A2 and B,soft clip={domain=4:6}];
+                \draw[stealth-] (axis cs:-1.5,-0.2) -- (axis cs:-0.5,-2) node[below] {$1$ ตารางหน่วย};
+                \draw[stealth-] (axis cs:0.25,0.5) -- (axis cs:0.25,2.2) node[above] {$8$ ตารางหน่วย};
+                \draw[stealth-] (axis cs:2.75,-1) -- (axis cs:3.2,-3.3) node[below] {$18$ ตารางหน่วย};
+                \draw[stealth-] (axis cs:5,1.2) -- (axis cs:3.8,3) node[above] {$19$ ตารางหน่วย};
+        \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    
+    ข้อใดต่อไปนี้ถูกต้อง
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item มีข้อความที่ถูกต้อง 4 ข้อ
+        \item มีข้อความที่ถูกต้อง 3 ข้อ
+        \item มีข้อความที่ถูกต้อง 2 ข้อ
+        \item มีข้อความที่ถูกต้อง 1 ข้อ
+        \item ไม่มีข้อความที่ถูกต้อง
+    \end{enumerate}
+    \vspace{10mm}
+    \item จงหาพื้นที่ซึ่งปิดล้อมด้วยเส้นโค้ง $y=-2x^3-3x^2+1$ กับแกน $x$ จาก $-2$ ถึง $2$
+    \newpage
+    \item กำหนดให้ $f$ เป็นฟังก์ชันต่อเนื่องและอินทิเกรตได้บนช่วง $[a,b]$ จงพิจารณาข้อความต่อไปนี้ ข้อใดถูก ข้อใดผิด
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{$\_\_\_\_$ \s\arabic{enumii})}
+        \item ถ้า \s $\displaystyle\int\limits_a^b f(x)\,dx \geq 0$ \s แล้ว \s $f(x)\geq0$ สำหรับทุก $x\in[a,b]$
+        \item ถ้า \s $c\in(a,b)$ เป็นจำนวนจริงซึ่ง $\displaystyle\int\limits_a^b f(x)\,dx = \displaystyle\int\limits_a^c f(x)\,dx$ \s แล้ว \s $f(x)=0$ สำหรับทุก $x\in[c,b]$
+        \item ถ้า $f$ เป็นฟังก์ชันเพิ่มและ $f(a)=0$ แล้ว \s $\displaystyle\int\limits_a^b f(x)\,dx > 0$
+        \item ถ้า $f$ เป็นฟังก์ชันลด,\s $c\in(a,b)$ และ $f(c)=0$ แล้ว \s จะมีจำนวนจริง $a$ และ $b$ ที่ทำให้ $\displaystyle\int\limits_a^b f(x)\,dx=0$ 
+        \item มีฟังก์ชัน $f(x)\neq0$ ที่ทำให้ $\displaystyle\int\limits_a^b |f(x)|\,dx=0$
+    \end{enumerate}
+    \vspace{20mm}
+    \Jitem จงหาพื้นที่ซึ่งปิดล้อมโดยเส้นโค้ง $y=3x^2-7$ และเส้นตรง $y=8x-4$
+\end{enumerate}
+\newpage
+\underline{\large แบบฝึกหัดเสริมประสบการณ์}
+\begin{enumerate}
+    \renewcommand{\labelenumii}{\arabic{enumii})}
+    \item ให้ $a$ และ $b$ เป็นจำนวนจริง และให้
+    $f(x) = \left\{ \begin{array}{ll}
+        x^2+ax+b & \hspace{0.8mm} ,x<2 \\
+        \sqrt{x-1} &  \hspace{0.8mm} ,2\leq x\leq5 \\
+        ax+b & \hspace{0.8mm} ,x>5
+        \end{array} 
+        \right.$ \\%[0.8ex]
+    ถ้า $f$ เป็นฟังก์ชันต่อเนื่องบนเซตของจำนวนจริง แล้วจงหาค่าของ $a-b$ \s\s [PAT 1 มี.ค. 57]
+    \vspace{80mm}
+    \item กำหนดให้ $a$ และ $b$ เป็นจำนวนจริง และให้ \s
+    $f(x) = \left\{ \begin{array}{ll}
+        \dfrac{\sqrt{25-21x}-\sqrt{5-x}}{x^2-3x+2} & \hspace{0.8mm} ,x< 1 \\
+        ax+b &  \hspace{0.8mm} ,1\leq x <4 \\
+        -2x+(8b+6) & \hspace{0.8mm} ,x\geq 4
+        \end{array} 
+        \right.$ \\%[1.5ex]
+    ถ้า \s
+    $\displaystyle\lim_{x\to0^{\scalebox{0.6}{$-$}}} f(4-x^2) = \displaystyle\lim_{x\to-5^{\scalebox{0.6}{$-$}}} f(-6-2x)$ \s 
+    และ \s
+    $\displaystyle\lim_{x\to\sqrt{2}} f(x^2) = 33-\left(2f(0)+\sqrt{5}\right)^2$
+    \begin{enumerate}
+        \begin{multicols}{2}
+            \item จงหาค่าของ $a$ และ $b$
+            \vspace{50mm}
+            \item จงตรวจสอบว่าฟังก์ชัน $f$ ต่อเนื่องที่ $x=1$ หรือไม่
+        \end{multicols}
+    \end{enumerate}
+    \newpage
+    \Jitem จงหาค่าของ \s $\displaystyle\lim_{x\to3} \dfrac{\nr{3}{x+5}-\sqrt{10-2x}}{x^2-x-6}$
+    \vspace{100mm}
+    \item กำหนดฟังก์ชัน \s $f:\mathbb{R}\rightarrow\mathbb{R}$ \s จงพิจารณาข้อความต่อไปนี้ ว่าข้อใดถูก ข้อใดผิด
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{$\_\_\_\_$\hspace{0.5mm}\arabic{enumii})}
+        \item ค่าวิกฤตของ $f$ มีโอกาสเป็นได้ทั้งค่าสูงสุดสัมพัทธ์ หรือ ค่าต่ำสุดสัมพัทธ์
+        \vspace{5mm}
+        \item ถ้า $c$ เป็นค่าวิกฤตของ $f$ และ $f''(c)=0$ \s แล้ว \s $f(c)$ ไม่เป็นทั้งค่าสูงสุดและค่าต่ำสุดสัมพัทธ์
+        \vspace{5mm}
+        \item ถ้า $f$ เป็นฟังก์ชันพหุนามดีกรี $n\in\mathbb{N}$ \s แล้วจะมีจุดที่ความชันเส้นสัมผัสเส้นโค้ง $f$ เท่ากับ $0$ ไม่ถึง $n$ จุด
+        \vspace{5mm}
+        \item ถ้า $f(x)=(x+1)^2(2x-1)^3$ \s แล้ว \s $f$ เป็นฟังก์ชันลดบนช่วง $(-1,0.5)$
+        \vspace{5mm}
+        \item มีฟังก์ชันที่ค่าสูงสุดสัมพัทธ์น้อยกว่าค่าต่ำสุดสัมพัทธ์
+    \end{enumerate}
+    \newpage
+    \item ร้านขายอุปกรณ์อิเล็กทรอนิกส์แห่งหนึ่งขายทรานซิสเตอร์ 2 ราคา ได้แก่ ราคาปลีก และ ราคาส่ง ซึ่งกำหนดราคาไว้ดังนี้
+        \begin{itemize}
+            \item ถ้าซื้อไม่เกิน $30$ ชิ้น คิดราคาขายปลีกชิ้นละ $100$ บาท
+            \item ถ้าซื้อเกิน $30$ ชิ้น ราคาต่อชิ้นจะลดลงชิ้นละ $2$ บาท ตามจำนวนที่ทรานซิสเตอร์ที่ซื้อเพิ่ม เช่น หากซื้อ 31 ชิ้นจะคิดราคาชิ้นละ $98$ บาท หากซื้อ $32$ ชิ้นจะคิดราคาชิ้นละ $96$ บาท 
+        \end{itemize}
+    จงหาว่าร้านค้าแห่งนี้ควรขายทรานซิสเตอร์กี่ชิ้นจึงจะได้เงินมากที่สุด
+    \vspace{60mm}
+    \Jitem ต้องการล้อมที่ดินแห่งหนึ่งเป็นรูปสี่เหลี่ยมมุมฉากโดยแบ่งพื้นที่ภายในออกเป็นสี่ส่วนดังรูป จงหาว่าจะล้อมพื้นที่สี่เหลี่ยมมุมฉากนี้ได้มากที่สุดกี่ตารางเมตร เมื่อใช้ลวดหนามที่ยาว $20$ เมตรในการล้อม
+    \begin{center}
+        \begin{tikzpicture}[scale=0.8]
+            \draw[] (0,0) rectangle (4,3);
+            \draw[] (0,0) -- (4,3);
+            \draw[] (0,3) -- (4,0);
+        \end{tikzpicture}
+    \end{center}
+    \newpage
+    \item กำหนดให้วัตถุชิ้นหนึ่งเคลื่อนที่ในแนวเส้นตรง มีอัตราการเปลี่ยนแปลงตำแหน่งเทียบกับเวลา ที่เวลา $t$ ใด ๆ เป็น $6t^2-18t+12$ เมตรต่อวินาที พิจารณาข้อความต่อไปนี้
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{(\alph{enumii})}
+        \item ตำแหน่งของวัตถุที่เวลาใด ๆ เป็น $s(t)=2t^3-9t^2+12t$
+        \item วัตถุนี้เคลื่อนที่ด้วยความเร่งที่เพิ่มขึ้นเสมอ
+        \item เมื่อผ่านไป $5$ วินาที วัตถุนี้เคลื่อนที่เป็นระยะทางทั้งสิ้น $87$ เมตร
+        \item ความเร็วเฉลี่ยจากเวลา $t=1.5$ ถึง $t=5$ มีค่าเท่ากับ $23$ เมตรต่อวินาที
+    \end{enumerate}
+    ข้อใดต่อไปนี้ถูกต้อง
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item มีข้อความที่ถูกต้อง 1 ข้อ
+        \item มีข้อความที่ถูกต้อง 2 ข้อ
+        \item มีข้อความที่ถูกต้อง 3 ข้อ
+        \item มีข้อความที่ถูกต้อง 4 ข้อ
+        \item ไม่มีข้อความใดถูกต้อง
+    \end{enumerate}
+    \vspace{25mm}
+    \Jitem กำหนดให้ \s $f(x)=\left(x^2g(x)+\left(g'(x)\right)^2\right)^{\scriptscriptstyle \frac{1}{3}}$ \s ถ้า $g(3)=-\dfrac{1}{27}$, \s $g'(3)=\dfrac{1}{3\sqrt{3}}$ และ $g''(3)=\dfrac{1}{\sqrt{3}}$ \\
+    แล้วจงหาค่าของ \s $\displaystyle\lim_{h\to0} \dfrac{\left(f(3+h)\right)^2-\left(f(3-h)\right)^2}{h}$
+    \newpage
+    \Jitem กำหนดให้ $p$ และ $q$ เป็นจำนวนจริง \s จงใช้ความรู้ทางแคลคูลัสเพื่อหาเงื่อนไขที่ทำให้สมการ \s $x^3+px+q=0$ \s มีคำตอบเป็นจำนวนจริงที่แตกต่างกันทั้งหมด [Hint: คำตอบของสมการมีความเกี่ยวข้องกับกราฟของฟังก์ชันอย่างไร]
+    \vspace{90mm}
+    \item กำหนดให้ $L$ เป็นเส้นตรงที่ตั้งฉากกับเส้นสัมผัสเส้นโค้ง $y=\dfrac{3}{8}(2x+1)^2-x$ ที่ $x=0$ \s ถ้า $A$ เป็นจุดบนเส้นโค้ง $y=x^4-2x^3+2x^2-3x+1$ ที่ทำให้ระยะห่างจากจุด $A$ ไปยังเส้นตรง $L$ สั้นที่สุด \s จงหาพิกัดของจุด $A$ พร้อมทั้งหาระยะห่างที่สั้นที่สุดดังกล่าวด้วย
+    \newpage
+    \item ความเร็วของรถยนต์คันหนึ่งที่เคลื่อนที่ไปบนถนนแสดงดังกราฟข้างล่าง โดยกำหนดให้ตำแหน่งเริ่มต้นของรถยนต์คือ $0$ กิโลเมตร
+    \begin{center}
+        \begin{tikzpicture}
+            \begin{axis}[xlabel={$t$ (min)},ylabel={$v(t)$ (km/h)},
+                unit vector ratio*=1 1 1,
+                %width=18cm,
+                %height=30cm,
+                %xtick={$-4$,$-3$,$-2$,$-2$,$-1$,$1$,$2$,$3$,$4$,$5$,$6$,$7$,$8$},
+                xtick={1,2,3,4,5,6,7,8},
+                xticklabels={$10$,$20$,$30$,$40$,$50$,$60$,$70$,$80$},
+                ytick={6,6.75},
+                yticklabels={$120$,$135$},
+                xmin=-0.5,xmax=10,ymin=-0.5,ymax=8,
+                every axis plot/.append style={very thick},
+                axis y line=middle,
+                axis x line=middle,
+                every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+                every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+                %every x tick label/.append style={font=\tiny, yshift=0.5ex},
+                ]
+                %\node[] at (axis cs:7.3,3.5) {\scalebox{0.8}{$y=f(x)$}};
+                \draw[gray,dashed] (axis cs:3,0) -- (axis cs:3,6) -- (axis cs:0,6);
+                \draw[gray,dashed] (axis cs:4.5,0) -- (axis cs:4.5,6.75) -- (axis cs:0,6.75);
+                \draw[gray,dashed] (axis cs:6,0) -- (axis cs:6,6.75);
+                %\draw[gray,dashed] (axis cs:16/3,0) -- (axis cs:16/3,90/12);
+                \addplot[blue,thick,domain=0:3,samples=500,name path=A1]{2*x};
+                \addplot[blue,thick,domain=3:4.5,samples=500,name path=A2]{0.5*x+4.5};
+                \addplot[blue,thick,domain=4.5:6,name path=B] {6.75};
+                \addplot[blue,thick,domain=6:8,name path=C] {1.6875*(x-8)^2};
+        \end{axis}
+        \end{tikzpicture}
+    \end{center}
+    พิจารณาข้อความต่อไปนี้
+    \begin{itemize}
+        \item[(ก)] หลังจากผ่านไป $1$ ชั่วโมง รถยนต์เคลื่อนที่ด้วยความหน่วง
+        \item[(ข)] ตลอดการเดินทาง รถยนต์เคลื่อนที่ไปเป็นระยะทางทั้งสิ้นมากกว่า $95.625$ กิโลเมตร
+        \item[(ค)] ตลอดการเดินทาง มีช่วงที่รถยนต์เคลื่อนที่ด้วยความเร่งบวกคงที่รวมกันทั้งสิ้น $60$ นาที
+        \item[(ง)] $\dfrac{d^2v}{dt^2}>0$ สำหรับทุก $t\in(60,80)$
+        \item[(จ)] ความเร่งเฉลี่ยจากนาทีที่ $30$ ไปยังนาทีที่ $60$ มีค่าน้อยกว่าความเร่งเฉลี่ยจากนาทีที่ $30$ ไปยังนาทีที่ $45$
+    \end{itemize}
+    ข้อใดต่อไปนี้ถูกต้อง
+    \begin{enumerate}
+        \renewcommand{\labelenumii}{\arabic{enumii})}
+        \item มีข้อความที่ถูกต้อง 1 ข้อ
+        \item มีข้อความที่ถูกต้อง 2 ข้อ
+        \item มีข้อความที่ถูกต้อง 3 ข้อ
+        \item มีข้อความที่ถูกต้อง 4 ข้อ
+        \item มีข้อความที่ถูกต้อง 5 ข้อ
+    \end{enumerate}
+    \newpage
+    \Jitem กำหนดให้ $f(x)=x^4+x^3-x^2-x+1$ \s ถ้า $f$ สามารถเขียนได้ในรูป
+    \begin{equation*}
+        f(x)=b_4(x+a)^4+b_3(x+a)^3+\cdots+b_0
+    \end{equation*}
+    โดยที่ $a,\s b_0,\s b_1,\s...,\s b_4$ เป็นจำนวนจริง แล้วจงหาค่า $a$ ที่ทำให้ \s $\displaystyle\sum_{n=0}^4 b_n$ \s มีค่าต่ำสุด
+    %\item นายธนเมศร์ต้องการสร้างห้องเก็บของใต้บันได
+    \vspace{80mm}
+    \item กำหนดให้ $f(x)$ เป็นฟังก์ชันพหุนามดีกรี $2$ มีค่าต่ำสุดเมื่อ $x=3$ \s และ $F(2x)$ เป็นปฏิยานุพันธ์ของ $f(x)$ \s ถ้า $F'(2)=-5$ และ $F''(-2)=-4$ \s พื้นที่ปิดล้อมของ $y=f(x)$ กับแกน $X$ จาก $x=0$ ถึง $x=3$ ตรงกับข้อใดต่อไปนี้ [สมาคม 61]
+    \begin{multicols}{4}
+        \begin{enumerate}
+            \renewcommand{\labelenumii}{\arabic{enumii})}
+            \item $16.5$
+            \item $18$
+            \item $33$
+            \item $36$
+        \end{enumerate}
+    \end{multicols}
+    \newpage
+    \item จงหาปริพันธ์จำกัดเขตต่อไปนี้
+    %\begin{multicols}{2}
+        \begin{enumerate}
+            \renewcommand{\labelenumii}{\arabic{enumii})}
+            \item $\displaystyle\int_{-4}^{-2} \dfrac{x^3+x^2+x}{x|x+2|-x^2-2}\,dx$ \hspace{1mm} [PAT 1 มี.ค. 59]
+            \vspace{50mm}
+            \Jitem $\displaystyle\int_{-1}^{3} \dfrac{x^2|x-2|}{(x-2)|x+1|-x^2+3x+2}\,dx$
+        \end{enumerate}
+    %\end{multicols}
+    \vspace{70mm}
+    \Jitem กำหนดให้กราฟของฟังก์ชัน $f$ มีแกน $Y$ เป็นแกนสมมาตร และ $f(x)\geq0$ สำหรับทุก $x\in\mathbb{R}$ \\
+    ถ้า \s 
+    $\dfrac{1}{4}\displaystyle\int\limits_{-1}^3 f(x)\,dx = \dfrac{1}{5}\displaystyle\int\limits_{-3}^2 f(x)\,dx = \displaystyle\int\limits_0^{1} f(x)\,dx = 3$ \s จงหา \s $\displaystyle\int\limits_{-2}^1 f(x)\,dx$
+    \newpage
+    %\item บริษัทรถยนต์สกายฟรีผลิตรถยนต์รุ่น CR5 โดยออกแบบให้มีอัตราการเปลี่ยนแปลงของปริมาณน้ำมันในถังเทียบกับอัตราเร็ว $v$ ใดๆ เป็น $a+bv+cv^2$ โดย $v$ คืออัตราเร็วในหน่วยกิโลเมตรต่อชั่วโมง 
+    \item กำหนดให้ $f(x)=x^3-3x^2-x+3$ \s ถ้า $L_1$ เป็นเส้นตรงซึ่งสัมผัสกราฟ $f$ ที่ตำแหน่ง $x=3$ และ $L_2$ เป็นเส้นตรงที่ตัด $L_1$ และผ่านจุดตัดแกน $x$ หนึ่งของ $f$ ดังรูป
+    \begin{center}
+        \begin{tikzpicture}
+            \begin{axis}[xlabel={$x$},ylabel={$y$},
+                unit vector ratio*=1 0.5 1,
+                %width=18cm,
+                %height=30cm,
+                %xtick={$-4$,$-3$,$-2$,$-2$,$-1$,$1$,$2$,$3$,$4$,$5$,$6$,$7$,$8$},
+                %xtick={-4,-3,-2,-1,1,2,3,4,5,6,7,8},
+                xtick=\empty,
+                %xticklabels={$a$,$b$},
+                ytick={-24},
+                yticklabels={\empty},
+                xmin=-4.2,xmax=8.4,ymin=-30,ymax=20,
+                every axis plot/.append style={very thick},
+                axis y line=middle,
+                axis x line=middle,
+                every axis x label/.style={at={(ticklabel* cs:1.0)},anchor=west},
+                every axis y label/.style={at={(ticklabel* cs:1.0)},anchor=south},
+                every x tick label/.append style={font=\tiny, yshift=0.5ex},
+                ]
+                \node[] at (axis cs:3.7,18) {\scalebox{0.8}{$f$}};
+                \node[] at (axis cs:1.1,16) {\scalebox{0.8}{$L_2$}};
+                \node[] at (axis cs:5.5,15.5) {\scalebox{0.8}{$L_1$}};
+                \addplot[blue,thick,domain=-5:5,samples=500,name path=A1]{(x+1)*(x-1)*(x-3)};
+                \addplot[red,thick,domain=-0.5:5.3,samples=500,name path=A2]{8*x-24};
+                \addplot[magenta,thick,domain=-0.5:1.8,samples=500,name path=A3]{24*x-24};
+                \addplot[yellow!40!white] fill between [of=A2 and A3,soft clip={domain=0:1}];
+                %\addplot[pink!40!white] fill between [of=A1 and B,soft clip={domain=-1:1.5}];
+                \addplot[yellow!40!white] fill between [of=A1 and A2,soft clip={domain=1:3}];
+            \end{axis}
+        \end{tikzpicture}
+    \end{center}
+    ส่วนที่แรเงามีพื้นที่เท่ากับกี่ตารางหน่วย
+\end{enumerate}
+\end{document}
